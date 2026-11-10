@@ -1,0 +1,6 @@
+# Options for the dart-dio generator (used by tool/gen_api.sh and tool/gen_api.ps1).
+pubName: hrms_api
+pubVersion: 1.0.0
+pubDescription: Generated Transport HRMS API client - do not edit
+serializationLibrary: json_serializable
+dateLibrary: core

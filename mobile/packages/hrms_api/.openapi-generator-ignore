@@ -1,0 +1,5 @@
+# Files openapi-generator must not (re)create in the generated client package.
+test/**
+.travis.yml
+git_push.sh
+.gitignore

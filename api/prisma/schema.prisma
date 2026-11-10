@@ -1,0 +1,933 @@
+// Transport HRMS — Prisma schema.
+// Phase 2 (PHASE-2-FEATURES.md): roles DIRECTOR / HR / OM / RM, business units, reporting line,
+// employee-ID + password login, per-record approvals.
+// Conventions (CLAUDE.md §5): UUID v7 ids, timestamptz in UTC, business dates as @db.Date (IST calendar
+// dates), createdAt/updatedAt/createdById, soft delete for employees/vehicles/routes/depots. Money in paise.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Login roles, highest authority first (PHASE-2-FEATURES §1.1). Drivers and loadmen do not log in.
+enum Role {
+  DIRECTOR
+  HR
+  OPERATIONAL_MANAGER
+  REGIONAL_MANAGER
+}
+
+// ───────────────────────────── Org ─────────────────────────────
+
+/// Legal/business entity (NLS, BMS, MOD, AERO). Every record carries one (PHASE-2-FEATURES §2).
+model BusinessUnit {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  name        String
+  code        String   @unique
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById String?  @map("created_by_id") @db.Uuid
+
+  depots  Depot[]
+  members EmployeeBusinessUnit[]
+
+  @@map("business_units")
+}
+
+/// Optional geographic grouping of depots (no longer used for access scope).
+model Region {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  name        String
+  code        String   @unique
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById String?  @map("created_by_id") @db.Uuid
+
+  depots Depot[]
+
+  @@map("regions")
+}
+
+/// Physical location. Belongs to exactly one business unit (decision Q2, docs/phase-2-gap.md).
+model Depot {
+  id             String    @id @default(uuid(7)) @db.Uuid
+  regionId       String    @map("region_id") @db.Uuid
+  businessUnitId String    @map("business_unit_id") @db.Uuid
+  name           String
+  code           String    @unique
+  address        String?
+  /// Indian state / UT code (ISO 3166-2:IN suffix, e.g. "MH", "KA").
+  state          String
+  lat            Float?
+  lng            Float?
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById    String?   @map("created_by_id") @db.Uuid
+  deletedAt      DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  region        Region         @relation(fields: [regionId], references: [id], onDelete: Restrict)
+  businessUnit  BusinessUnit   @relation(fields: [businessUnitId], references: [id], onDelete: Restrict)
+  jobs          EmployeeJob[]
+  vehicles      Vehicle[]
+  routes        Route[]
+  dutyTemplates DutyTemplate[]
+  duties        Duty[]
+
+  @@index([regionId])
+  @@index([businessUnitId])
+  @@map("depots")
+}
+
+// ──────────────────────────── Users ────────────────────────────
+
+/// A login. Every user is an employee; login is Employee.empCode + password (PHASE-2-FEATURES §1.3).
+model User {
+  id                    String    @id @default(uuid(7)) @db.Uuid
+  name                  String
+  /// E.164, e.g. +919876543210
+  phone                 String    @unique
+  email                 String?
+  role                  Role
+  isActive              Boolean   @default(true) @map("is_active")
+  employeeId            String    @unique @map("employee_id") @db.Uuid
+  /// argon2id. Null = no password set yet (cannot log in until the director sets one).
+  passwordHash          String?   @map("password_hash")
+  passwordChangedAt     DateTime? @map("password_changed_at") @db.Timestamptz(3)
+  failedLoginCount      Int       @default(0) @map("failed_login_count")
+  failedWindowStartedAt DateTime? @map("failed_window_started_at") @db.Timestamptz(3)
+  lockedUntil           DateTime? @map("locked_until") @db.Timestamptz(3)
+  lastLoginAt           DateTime? @map("last_login_at") @db.Timestamptz(3)
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById           String?   @map("created_by_id") @db.Uuid
+
+  employee      Employee       @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  refreshTokens RefreshToken[]
+  devices       DeviceToken[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+// ───────────────────────────── Auth ────────────────────────────
+
+/// Rotating refresh tokens. Each login starts a family; each refresh replaces the token within the family.
+/// Re-use of an already rotated token revokes the whole family (token theft detection).
+model RefreshToken {
+  id           String    @id @default(uuid(7)) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  familyId     String    @map("family_id") @db.Uuid
+  /// HMAC-SHA256 of the opaque token.
+  tokenHash    String    @unique @map("token_hash")
+  expiresAt    DateTime  @map("expires_at") @db.Timestamptz(3)
+  revokedAt    DateTime? @map("revoked_at") @db.Timestamptz(3)
+  replacedById String?   @map("replaced_by_id") @db.Uuid
+  userAgent    String?   @map("user_agent")
+  ip           String?
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([familyId])
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+// ──────────────────────────── Audit ────────────────────────────
+
+model AuditLog {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  /// Null for system actions (jobs, seed).
+  actorUserId String?  @map("actor_user_id") @db.Uuid
+  action      String
+  entityType  String   @map("entity_type")
+  entityId    String   @map("entity_id")
+  before      Json?
+  after       Json?
+  at          DateTime @default(now()) @db.Timestamptz(3)
+  requestId   String?  @map("request_id")
+  ip          String?
+
+  @@index([entityType, entityId])
+  @@index([actorUserId, at])
+  @@map("audit_logs")
+}
+
+// ─────────────────────── Settings & notifications ───────────────────────
+
+/// Company-level configuration. Keys, value schemas and defaults: src/modules/settings/registry.ts.
+model Setting {
+  key         String   @id
+  value       Json
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  updatedById String?  @map("updated_by_id") @db.Uuid
+
+  @@map("settings")
+}
+
+enum NotificationStatus {
+  /// In-app only (no registered device).
+  STORED
+  SENT
+  FAILED
+}
+
+/// In-app notification (bell) — also pushed to the recipient's devices (PHASE-2-FEATURES §10).
+model Notification {
+  id              String             @id @default(uuid(7)) @db.Uuid
+  recipientUserId String             @map("recipient_user_id") @db.Uuid
+  /// e.g. ATTENDANCE_SUBMITTED, LEAVE_DECIDED, TASK_ALLOTTED
+  type            String
+  title           String
+  body            String
+  /// Entity the notification opens (ATTENDANCE, LEAVE, ALLOWANCE, TASK, PAYSLIP, CORRECTION, DOCUMENT, USER).
+  entityType      String?            @map("entity_type")
+  entityId        String?            @map("entity_id")
+  businessUnitId  String             @map("business_unit_id") @db.Uuid
+  pushStatus      NotificationStatus @default(STORED) @map("push_status")
+  readAt          DateTime?          @map("read_at") @db.Timestamptz(3)
+  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  recipient User @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
+
+  @@index([recipientUserId, createdAt])
+  @@map("notifications")
+}
+
+/// FCM registration tokens of managers' devices.
+model DeviceToken {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  token      String   @unique
+  platform   String
+  lastSeenAt DateTime @default(now()) @map("last_seen_at") @db.Timestamptz(3)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("device_tokens")
+}
+
+// ──────────────────────────── Employees ────────────────────────────
+
+enum EmployeeCategory {
+  DRIVER
+  LOADMAN
+  CONDUCTOR
+  HELPER
+  MECHANIC
+  DEPOT_STAFF
+  OFFICE
+}
+
+enum EmploymentType {
+  PERMANENT
+  FIXED_TERM
+  CONTRACT
+}
+
+enum EmployeeStatus {
+  ACTIVE
+  ON_NOTICE
+  EXITED
+  SUSPENDED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum PreferredChannel {
+  WHATSAPP
+  SMS
+}
+
+/// A person on the payroll. Drivers / loadmen are records only; managers additionally have a User.
+model Employee {
+  id                   String           @id @default(uuid(7)) @db.Uuid
+  /// BU code prefix + digits, e.g. NLS001 (decision Q3). Unique case-insensitively (index in migration).
+  empCode              String           @unique @map("emp_code")
+  fullName             String           @map("full_name")
+  /// E.164
+  phone                String
+  altPhone             String?          @map("alt_phone")
+  dob                  DateTime?        @db.Date
+  gender               Gender?
+  joiningDate          DateTime         @map("joining_date") @db.Date
+  exitDate             DateTime?        @map("exit_date") @db.Date
+  exitReason           String?          @map("exit_reason")
+  category             EmployeeCategory
+  employmentType       EmploymentType   @map("employment_type")
+  contractorName       String?          @map("contractor_name")
+  status               EmployeeStatus   @default(ACTIVE)
+  photoKey             String?          @map("photo_key")
+  uan                  String?
+  esicNo               String?          @map("esic_no")
+  /// AES-256-GCM (lib/crypto.ts). Never returned unmasked.
+  panEncrypted         String?          @map("pan_encrypted")
+  panLast4             String?          @map("pan_last4")
+  /// Only the last 4 digits are ever stored (DPDP / Aadhaar Act).
+  aadhaarLast4         String?          @map("aadhaar_last4")
+  /// AES-256-GCM. HR only, masked.
+  bankAccountEncrypted String?          @map("bank_account_encrypted")
+  bankAccountLast4     String?          @map("bank_account_last4")
+  ifsc                 String?
+  preferredChannel     PreferredChannel @default(WHATSAPP) @map("preferred_channel")
+  createdAt            DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById          String?          @map("created_by_id") @db.Uuid
+  deletedAt            DateTime?        @map("deleted_at") @db.Timestamptz(3)
+
+  user          User?
+  businessUnits EmployeeBusinessUnit[]
+  jobs          EmployeeJob[]
+  reportees     EmployeeJob[]          @relation("JobReportingTo")
+  documents     Document[]
+  assignments   DutyAssignment[]
+  attendance    AttendanceMark[]
+  leaveBalances LeaveBalance[]
+  leaveRequests LeaveRequest[]
+  allowances    AllowanceRequest[]
+  payslips      Payslip[]
+  tasksAllotted Task[]                 @relation("TaskAllottedBy")
+  tasksAssigned Task[]                 @relation("TaskAssignee")
+
+  @@index([fullName])
+  @@index([status])
+  @@map("employees")
+}
+
+/// Business-unit membership. Drivers/loadmen: exactly one; managers: one or more with one primary;
+/// the director: none (implicitly all).
+model EmployeeBusinessUnit {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  employeeId     String   @map("employee_id") @db.Uuid
+  businessUnitId String   @map("business_unit_id") @db.Uuid
+  isPrimary      Boolean  @default(false) @map("is_primary")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  createdById    String?  @map("created_by_id") @db.Uuid
+
+  employee     Employee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  businessUnit BusinessUnit @relation(fields: [businessUnitId], references: [id], onDelete: Restrict)
+
+  @@unique([employeeId, businessUnitId])
+  @@index([businessUnitId])
+  @@map("employee_business_units")
+}
+
+/// Effective-dated job history: [effectiveFrom, effectiveTo). effectiveTo null = open row.
+/// No overlapping ranges per employee (exclusion constraint). Carries the reporting line (decision Q6).
+model EmployeeJob {
+  id                    String    @id @default(uuid(7)) @db.Uuid
+  employeeId            String    @map("employee_id") @db.Uuid
+  depotId               String    @map("depot_id") @db.Uuid
+  designation           String
+  grade                 String?
+  /// The employee this person reports to (one role up, sharing a BU). Null only for the director.
+  reportingToEmployeeId String?   @map("reporting_to_employee_id") @db.Uuid
+  effectiveFrom         DateTime  @map("effective_from") @db.Date
+  effectiveTo           DateTime? @map("effective_to") @db.Date
+  changeReason          String?   @map("change_reason")
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById           String?   @map("created_by_id") @db.Uuid
+
+  employee    Employee  @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  depot       Depot     @relation(fields: [depotId], references: [id], onDelete: Restrict)
+  reportingTo Employee? @relation("JobReportingTo", fields: [reportingToEmployeeId], references: [id], onDelete: Restrict)
+
+  @@index([employeeId, effectiveFrom])
+  @@index([depotId])
+  @@index([reportingToEmployeeId])
+  @@map("employee_jobs")
+}
+
+enum DocumentType {
+  DRIVING_LICENCE
+  PSV_BADGE
+  MEDICAL_FITNESS
+  POLICE_VERIFICATION
+  AADHAAR
+  PAN
+  TRAINING_CERT
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING_VERIFICATION
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+model Document {
+  id              String         @id @default(uuid(7)) @db.Uuid
+  employeeId      String         @map("employee_id") @db.Uuid
+  type            DocumentType
+  /// For AADHAAR only the last 4 digits; for PAN a masked value (the full PAN is encrypted on the employee).
+  number          String
+  licenceClass    String?        @map("licence_class")
+  issueDate       DateTime?      @map("issue_date") @db.Date
+  /// Last day the document is valid.
+  expiryDate      DateTime?      @map("expiry_date") @db.Date
+  fileKey         String?        @map("file_key")
+  status          DocumentStatus @default(PENDING_VERIFICATION)
+  verifiedById    String?        @map("verified_by_id") @db.Uuid
+  verifiedAt      DateTime?      @map("verified_at") @db.Timestamptz(3)
+  rejectionReason String?        @map("rejection_reason")
+  createdAt       DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById     String?        @map("created_by_id") @db.Uuid
+
+  employee Employee        @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  alerts   DocumentAlert[]
+
+  @@index([employeeId, type])
+  @@index([status])
+  @@index([expiryDate])
+  @@map("documents")
+}
+
+/// Which document types each employee category must hold to be rostered (config).
+model DocumentRequirement {
+  id           String           @id @default(uuid(7)) @db.Uuid
+  category     EmployeeCategory
+  documentType DocumentType     @map("document_type")
+  createdAt    DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById  String?          @map("created_by_id") @db.Uuid
+
+  @@unique([category, documentType])
+  @@map("document_requirements")
+}
+
+/// One row per expiry alert sent (makes the nightly job idempotent).
+model DocumentAlert {
+  id            String   @id @default(uuid(7)) @db.Uuid
+  documentId    String   @map("document_id") @db.Uuid
+  thresholdDays Int      @map("threshold_days")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, thresholdDays])
+  @@map("document_alerts")
+}
+
+// ──────────────────────────── Fleet & roster ────────────────────────────
+
+enum VehicleStatus {
+  ACTIVE
+  IN_WORKSHOP
+  RETIRED
+}
+
+model Vehicle {
+  id          String        @id @default(uuid(7)) @db.Uuid
+  regNo       String        @unique @map("reg_no")
+  /// Free text for now (bus / truck / cab …). TODO(business): fleet types (CLAUDE.md §13).
+  type        String
+  capacity    Int?
+  depotId     String        @map("depot_id") @db.Uuid
+  status      VehicleStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById String?       @map("created_by_id") @db.Uuid
+  deletedAt   DateTime?     @map("deleted_at") @db.Timestamptz(3)
+
+  depot  Depot  @relation(fields: [depotId], references: [id], onDelete: Restrict)
+  duties Duty[]
+
+  @@index([depotId])
+  @@map("vehicles")
+}
+
+model Route {
+  id              String    @id @default(uuid(7)) @db.Uuid
+  code            String    @unique
+  name            String
+  origin          String
+  destination     String
+  distanceKm      Float?    @map("distance_km")
+  standardMinutes Int       @map("standard_minutes")
+  depotId         String    @map("depot_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById     String?   @map("created_by_id") @db.Uuid
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  depot     Depot          @relation(fields: [depotId], references: [id], onDelete: Restrict)
+  duties    Duty[]
+  templates DutyTemplate[]
+
+  @@index([depotId])
+  @@map("routes")
+}
+
+/// A recurring shift pattern of a depot (start/end wall-clock times in IST).
+model DutyTemplate {
+  id              String    @id @default(uuid(7)) @db.Uuid
+  depotId         String    @map("depot_id") @db.Uuid
+  name            String
+  /// 'HH:MM' IST
+  startTime       String    @map("start_time")
+  /// 'HH:MM' IST; on the next day when crossesMidnight
+  endTime         String    @map("end_time")
+  crossesMidnight Boolean   @default(false) @map("crosses_midnight")
+  routeId         String?   @map("route_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById     String?   @map("created_by_id") @db.Uuid
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(3)
+
+  depot  Depot  @relation(fields: [depotId], references: [id], onDelete: Restrict)
+  route  Route? @relation(fields: [routeId], references: [id], onDelete: SetNull)
+  duties Duty[]
+
+  @@index([depotId])
+  @@map("duty_templates")
+}
+
+enum DutyStatus {
+  PLANNED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model Duty {
+  id             String     @id @default(uuid(7)) @db.Uuid
+  depotId        String     @map("depot_id") @db.Uuid
+  /// IST business date the duty belongs to (its start date).
+  dutyDate       DateTime   @map("duty_date") @db.Date
+  routeId        String?    @map("route_id") @db.Uuid
+  vehicleId      String?    @map("vehicle_id") @db.Uuid
+  templateId     String?    @map("template_id") @db.Uuid
+  scheduledStart DateTime   @map("scheduled_start") @db.Timestamptz(3)
+  scheduledEnd   DateTime   @map("scheduled_end") @db.Timestamptz(3)
+  status         DutyStatus @default(PLANNED)
+  notes          String?
+  createdAt      DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById    String?    @map("created_by_id") @db.Uuid
+
+  depot       Depot            @relation(fields: [depotId], references: [id], onDelete: Restrict)
+  route       Route?           @relation(fields: [routeId], references: [id], onDelete: Restrict)
+  vehicle     Vehicle?         @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  template    DutyTemplate?    @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  assignments DutyAssignment[]
+
+  @@index([depotId, dutyDate])
+  @@index([vehicleId, dutyDate])
+  @@map("duties")
+}
+
+enum AssignmentRole {
+  DRIVER
+  CO_DRIVER
+  CONDUCTOR
+  HELPER
+}
+
+model DutyAssignment {
+  id          String         @id @default(uuid(7)) @db.Uuid
+  dutyId      String         @map("duty_id") @db.Uuid
+  employeeId  String         @map("employee_id") @db.Uuid
+  role        AssignmentRole
+  isSpare     Boolean        @default(false) @map("is_spare")
+  /// Roster rule warnings accepted when the assignment was made (JSON array).
+  warnings    Json?
+  actualStart DateTime?      @map("actual_start") @db.Timestamptz(3)
+  actualEnd   DateTime?      @map("actual_end") @db.Timestamptz(3)
+  km          Float?
+  tripCount   Int?           @map("trip_count")
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById String?        @map("created_by_id") @db.Uuid
+
+  duty     Duty     @relation(fields: [dutyId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+
+  @@unique([dutyId, employeeId])
+  @@index([employeeId])
+  @@map("duty_assignments")
+}
+
+// ──────────────────────── Requests & approvals (shared) ────────────────────────
+
+/// Status of a request that goes to the reporting-line approver (leave/OD, corrections, allowances).
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// ──────────────────────────── Attendance ────────────────────────────
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  HALF_DAY
+  ON_LEAVE
+  ON_DUTY
+  WEEKLY_OFF
+  HOLIDAY
+}
+
+enum AttendanceSource {
+  /// Marked by the RM for a driver / loadman (final).
+  MANAGER
+  /// Self-marked by an RM / OM / HR (needs approval).
+  SELF
+  /// Set from approved leave / OD or an approved correction.
+  SYSTEM
+  BIOMETRIC
+  TELEMATICS
+  IMPORT
+}
+
+enum ApprovalState {
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+/// One record per employee per date (PHASE-2-FEATURES §4.1).
+model AttendanceMark {
+  id                 String           @id @default(uuid(7)) @db.Uuid
+  employeeId         String           @map("employee_id") @db.Uuid
+  businessUnitId     String           @map("business_unit_id") @db.Uuid
+  date               DateTime         @db.Date
+  status             AttendanceStatus
+  approvalState      ApprovalState    @map("approval_state")
+  source             AttendanceSource
+  dutyAssignmentId   String?          @map("duty_assignment_id") @db.Uuid
+  leaveRequestId     String?          @map("leave_request_id") @db.Uuid
+  markedById         String           @map("marked_by_id") @db.Uuid
+  markedAt           DateTime         @map("marked_at") @db.Timestamptz(3)
+  /// Approver for self-marks (the subject's reporting-to at submission).
+  approverEmployeeId String?          @map("approver_employee_id") @db.Uuid
+  approverRole       Role?            @map("approver_role")
+  decidedById        String?          @map("decided_by_id") @db.Uuid
+  decidedAt          DateTime?        @map("decided_at") @db.Timestamptz(3)
+  rejectionReason    String?          @map("rejection_reason")
+  /// Client-generated id of the last write; replays of the same id are no-ops (offline sync).
+  clientMutationId   String?          @unique @map("client_mutation_id")
+  note               String?
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime         @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+
+  @@unique([employeeId, date])
+  @@index([businessUnitId, date])
+  @@index([approverEmployeeId, approvalState])
+  @@map("attendance_marks")
+}
+
+/// Change to a mark after the edit window or after approval; approved by the raiser's reporting-to.
+model AttendanceCorrection {
+  id                 String            @id @default(uuid(7)) @db.Uuid
+  employeeId         String            @map("employee_id") @db.Uuid
+  businessUnitId     String            @map("business_unit_id") @db.Uuid
+  date               DateTime          @db.Date
+  fromStatus         AttendanceStatus? @map("from_status")
+  toStatus           AttendanceStatus  @map("to_status")
+  note               String?
+  reason             String
+  status             RequestStatus     @default(PENDING)
+  raisedById         String            @map("raised_by_id") @db.Uuid
+  approverEmployeeId String            @map("approver_employee_id") @db.Uuid
+  approverRole       Role              @map("approver_role")
+  decidedById        String?           @map("decided_by_id") @db.Uuid
+  decidedAt          DateTime?         @map("decided_at") @db.Timestamptz(3)
+  rejectionReason    String?           @map("rejection_reason")
+  createdAt          DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime          @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([employeeId, date])
+  @@index([approverEmployeeId, status])
+  @@map("attendance_corrections")
+}
+
+// ──────────────────────────── Leave & OD ────────────────────────────
+
+model LeaveType {
+  id              String   @id @default(uuid(7)) @db.Uuid
+  code            String   @unique
+  name            String
+  paid            Boolean
+  /// { "type": "MONTHLY" | "ANNUAL" | "NONE" }
+  accrualRule     Json     @map("accrual_rule")
+  carryForwardMax Decimal  @default(0) @map("carry_forward_max") @db.Decimal(7, 2)
+  encashable      Boolean  @default(false)
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById     String?  @map("created_by_id") @db.Uuid
+
+  policies LeavePolicy[]
+  balances LeaveBalance[]
+  requests LeaveRequest[]
+
+  @@map("leave_types")
+}
+
+/// Who gets a leave type and how much. Null filters match everyone; the most specific match wins.
+model LeavePolicy {
+  id             String            @id @default(uuid(7)) @db.Uuid
+  leaveTypeId    String            @map("leave_type_id") @db.Uuid
+  category       EmployeeCategory?
+  employmentType EmploymentType?   @map("employment_type")
+  state          String?
+  annualQuota    Decimal           @map("annual_quota") @db.Decimal(7, 2)
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime          @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById    String?           @map("created_by_id") @db.Uuid
+
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id], onDelete: Restrict)
+
+  @@index([leaveTypeId])
+  @@map("leave_policies")
+}
+
+model LeaveBalance {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  employeeId  String   @map("employee_id") @db.Uuid
+  leaveTypeId String   @map("leave_type_id") @db.Uuid
+  year        Int
+  opening     Decimal  @default(0) @db.Decimal(7, 2)
+  accrued     Decimal  @default(0) @db.Decimal(7, 2)
+  used        Decimal  @default(0) @db.Decimal(7, 2)
+  encashed    Decimal  @default(0) @db.Decimal(7, 2)
+  /// opening + accrued - used - encashed (kept in sync on every write).
+  closing     Decimal  @default(0) @db.Decimal(7, 2)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  employee  Employee  @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  leaveType LeaveType @relation(fields: [leaveTypeId], references: [id], onDelete: Restrict)
+
+  @@unique([employeeId, leaveTypeId, year])
+  @@map("leave_balances")
+}
+
+/// Makes the accrual job idempotent: one row per employee, leave type and period ('YYYY-MM' or 'YYYY').
+model LeaveAccrualLog {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  employeeId  String   @map("employee_id") @db.Uuid
+  leaveTypeId String   @map("leave_type_id") @db.Uuid
+  period      String
+  days        Decimal  @db.Decimal(7, 2)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@unique([employeeId, leaveTypeId, period])
+  @@map("leave_accrual_logs")
+}
+
+enum LeaveKind {
+  LEAVE
+  /// On duty: working away from the usual place.
+  OD
+}
+
+/// Leave and OD in one table (PHASE-2-FEATURES §5). Approver = the subject's reporting-to, except
+/// drivers/loadmen whose RM raises and approves.
+model LeaveRequest {
+  id                 String        @id @default(uuid(7)) @db.Uuid
+  employeeId         String        @map("employee_id") @db.Uuid
+  businessUnitId     String        @map("business_unit_id") @db.Uuid
+  kind               LeaveKind
+  /// Required for LEAVE, null for OD.
+  leaveTypeId        String?       @map("leave_type_id") @db.Uuid
+  fromDate           DateTime      @map("from_date") @db.Date
+  toDate             DateTime      @map("to_date") @db.Date
+  /// Leave starts at mid-day on fromDate.
+  fromHalf           Boolean       @default(false) @map("from_half")
+  /// Leave ends at mid-day on toDate.
+  toHalf             Boolean       @default(false) @map("to_half")
+  days               Decimal       @db.Decimal(7, 2)
+  reason             String
+  odLocation         String?       @map("od_location")
+  odPurpose          String?       @map("od_purpose")
+  /// 'HH:MM' IST
+  odFromTime         String?       @map("od_from_time")
+  odToTime           String?       @map("od_to_time")
+  status             RequestStatus @default(PENDING)
+  raisedById         String        @map("raised_by_id") @db.Uuid
+  approverEmployeeId String        @map("approver_employee_id") @db.Uuid
+  approverRole       Role          @map("approver_role")
+  decidedById        String?       @map("decided_by_id") @db.Uuid
+  decidedAt          DateTime?     @map("decided_at") @db.Timestamptz(3)
+  rejectionReason    String?       @map("rejection_reason")
+  cancelledById      String?       @map("cancelled_by_id") @db.Uuid
+  cancelledAt        DateTime?     @map("cancelled_at") @db.Timestamptz(3)
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  employee  Employee   @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  leaveType LeaveType? @relation(fields: [leaveTypeId], references: [id], onDelete: Restrict)
+
+  @@index([employeeId, fromDate])
+  @@index([businessUnitId, status])
+  @@index([approverEmployeeId, status])
+  @@map("leave_requests")
+}
+
+// ──────────────────────────── Allowances (PHASE-2-FEATURES §6) ────────────────────────────
+
+/// Configurable by HR / director. Seed examples are TODO(business).
+model AllowanceType {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  code           String   @unique
+  name           String
+  /// Optional per-request maximum, in paise.
+  maxAmountPaise Int?     @map("max_amount_paise")
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById    String?  @map("created_by_id") @db.Uuid
+
+  requests AllowanceRequest[]
+
+  @@map("allowance_types")
+}
+
+/// One request per beneficiary; a multi-beneficiary submission shares a batchId (§6.2).
+model AllowanceRequest {
+  id                   String        @id @default(uuid(7)) @db.Uuid
+  batchId              String        @map("batch_id") @db.Uuid
+  /// Beneficiary.
+  employeeId           String        @map("employee_id") @db.Uuid
+  raisedByEmployeeId   String        @map("raised_by_employee_id") @db.Uuid
+  raisedById           String        @map("raised_by_id") @db.Uuid
+  businessUnitId       String        @map("business_unit_id") @db.Uuid
+  allowanceTypeId      String        @map("allowance_type_id") @db.Uuid
+  requestedAmountPaise Int           @map("requested_amount_paise")
+  approvedAmountPaise  Int?          @map("approved_amount_paise")
+  fromDate             DateTime      @map("from_date") @db.Date
+  toDate               DateTime      @map("to_date") @db.Date
+  comment              String?
+  voiceNoteKey         String?       @map("voice_note_key")
+  receiptKey           String?       @map("receipt_key")
+  status               RequestStatus @default(PENDING)
+  approverEmployeeId   String        @map("approver_employee_id") @db.Uuid
+  approverRole         Role          @map("approver_role")
+  decidedById          String?       @map("decided_by_id") @db.Uuid
+  decidedAt            DateTime?     @map("decided_at") @db.Timestamptz(3)
+  decisionComment      String?       @map("decision_comment")
+  rejectionReason      String?       @map("rejection_reason")
+  createdAt            DateTime      @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime      @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  employee      Employee      @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  allowanceType AllowanceType @relation(fields: [allowanceTypeId], references: [id], onDelete: Restrict)
+
+  @@index([batchId])
+  @@index([approverEmployeeId, status])
+  @@index([businessUnitId, status])
+  @@index([employeeId, fromDate])
+  @@index([raisedByEmployeeId])
+  @@map("allowance_requests")
+}
+
+// ──────────────────────────── Payslips (PHASE-2-FEATURES §7) ────────────────────────────
+
+/// One per employee and pay period; the PDF itself is produced outside the app and uploaded by HR.
+model Payslip {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  employeeId     String   @map("employee_id") @db.Uuid
+  /// YYYY-MM
+  period         String   @db.Char(7)
+  businessUnitId String   @map("business_unit_id") @db.Uuid
+  latestVersion  Int      @map("latest_version")
+  fileKey        String   @map("file_key")
+  sizeBytes      Int      @map("size_bytes")
+  uploadedById   String   @map("uploaded_by_id") @db.Uuid
+  uploadedAt     DateTime @map("uploaded_at") @db.Timestamptz(3)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  employee Employee         @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  versions PayslipVersion[]
+
+  @@unique([employeeId, period])
+  @@index([period, businessUnitId])
+  @@map("payslips")
+}
+
+/// Every uploaded file is kept; earlier versions are visible to HR only.
+model PayslipVersion {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  payslipId    String   @map("payslip_id") @db.Uuid
+  version      Int
+  fileKey      String   @map("file_key")
+  sizeBytes    Int      @map("size_bytes")
+  originalName String   @map("original_name")
+  uploadedById String   @map("uploaded_by_id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  payslip Payslip @relation(fields: [payslipId], references: [id], onDelete: Cascade)
+
+  @@unique([payslipId, version])
+  @@map("payslip_versions")
+}
+
+// ──────────────────────────── Daily tasks (PHASE-2-FEATURES §8) ────────────────────────────
+
+enum TaskPriority {
+  NORMAL
+  HIGH
+}
+
+enum TaskStatus {
+  PENDING
+  COMPLETED
+  NOT_DONE
+}
+
+/// Allotted by an OM to one RM (several RMs → one task each, sharing groupId). Overdue = PENDING after its date.
+model Task {
+  id                   String       @id @default(uuid(7)) @db.Uuid
+  groupId              String       @map("group_id") @db.Uuid
+  date                 DateTime     @db.Date
+  businessUnitId       String       @map("business_unit_id") @db.Uuid
+  title                String
+  details              String?
+  priority             TaskPriority @default(NORMAL)
+  allottedByEmployeeId String       @map("allotted_by_employee_id") @db.Uuid
+  allottedById         String       @map("allotted_by_id") @db.Uuid
+  assigneeEmployeeId   String       @map("assignee_employee_id") @db.Uuid
+  status               TaskStatus   @default(PENDING)
+  /// Required when NOT_DONE.
+  reason               String?
+  comment              String?
+  submittedAt          DateTime?    @map("submitted_at") @db.Timestamptz(3)
+  reopenedAt           DateTime?    @map("reopened_at") @db.Timestamptz(3)
+  reopenComment        String?      @map("reopen_comment")
+  reopenCount          Int          @default(0) @map("reopen_count")
+  createdAt            DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt            DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  allottedBy Employee @relation("TaskAllottedBy", fields: [allottedByEmployeeId], references: [id], onDelete: Restrict)
+  assignee   Employee @relation("TaskAssignee", fields: [assigneeEmployeeId], references: [id], onDelete: Restrict)
+
+  @@index([assigneeEmployeeId, date])
+  @@index([allottedByEmployeeId, date])
+  @@index([businessUnitId, date])
+  @@index([groupId])
+  @@map("tasks")
+}

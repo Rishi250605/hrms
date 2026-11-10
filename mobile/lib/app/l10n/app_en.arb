@@ -1,0 +1,1017 @@
+{
+  "@@locale": "en",
+  "appTitle": "Transport HRMS",
+  "retry": "Retry",
+  "cancel": "Cancel",
+  "logout": "Sign out",
+  "loadingSession": "Signing you in…",
+  "sessionLoadFailed": "Could not reach the server. Check your connection and try again.",
+  "loginTitle": "Sign in",
+  "loginSubtitle": "Manager app for attendance, leave, allowances, payslips and tasks",
+  "phoneLabel": "Mobile number",
+  "phoneHint": "98765 43210",
+  "phoneInvalid": "Enter a valid 10-digit mobile number",
+  "sendOtp": "Send OTP",
+  "otpSentTo": "Enter the 6-digit OTP sent to {phone}",
+  "@otpSentTo": {
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "otpLabel": "OTP",
+  "otpInvalid": "Enter the 6-digit OTP",
+  "verify": "Verify and sign in",
+  "changeNumber": "Change number",
+  "resendOtp": "Resend OTP",
+  "resendIn": "Resend in {seconds}s",
+  "@resendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "errorNetwork": "No connection to the server. Check your network and try again.",
+  "errorUnknown": "Something went wrong. Please try again.",
+  "errorSessionExpired": "Your session has expired. Please sign in again.",
+  "navHome": "Home",
+  "navRoster": "Roster",
+  "navAttendance": "Attendance",
+  "navRequests": "Requests",
+  "navApprovals": "Approvals",
+  "navDepots": "Depots",
+  "navReports": "Reports",
+  "navEmployees": "Employees",
+  "navPayroll": "Payroll",
+  "navMore": "More",
+  "roleOperationalManager": "Operational manager",
+  "roleRegionalManager": "Regional manager",
+  "roleOperationalHead": "Operational head",
+  "roleHr": "HR",
+  "homeGreeting": "Hello, {name}",
+  "@homeGreeting": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "comingInPhase": "Available in phase {phase}",
+  "@comingInPhase": {
+    "placeholders": {
+      "phase": {
+        "type": "int"
+      }
+    }
+  },
+  "featureComingSoonTitle": "{feature} is on the way",
+  "@featureComingSoonTitle": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "omCardDuties": "Today's duties",
+  "omCardAttendance": "Mark attendance",
+  "omCardExpiring": "Expiring documents in my depots",
+  "omCardMyRequests": "Requests I raised",
+  "rmCardApprovals": "Approvals inbox",
+  "rmCardNoShows": "No-shows and unfilled duties",
+  "rmCardExpiryRisk": "Expiry risk by depot",
+  "headCardAttendance": "Attendance %",
+  "headCardOt": "OT hours and cost",
+  "headCardUnfilled": "Duties unfilled",
+  "headCardIdleVehicles": "Vehicles idle for lack of drivers",
+  "headCardApprovals": "Approvals needing your sign-off",
+  "hrCardVerify": "Documents to verify",
+  "hrCardJoinersLeavers": "Joiners and leavers",
+  "hrCardPayroll": "Payroll run status",
+  "hrCardExpiring": "Expiring documents (company-wide)",
+  "profileTitle": "My profile",
+  "superAdmin": "Super admin",
+  "scopeTitle": "My data scope",
+  "scopeCompanyWide": "Company-wide access",
+  "scopeRegions": "Regions",
+  "scopeDepots": "Depots",
+  "scopeNone": "No depots or regions assigned yet. Ask HR to set your scope.",
+  "navDocuments": "Verify",
+  "navFleet": "Fleet",
+  "navNotifications": "Notifications",
+  "ok": "OK",
+  "save": "Save",
+  "saved": "Saved",
+  "next": "Next",
+  "back": "Back",
+  "remove": "Remove",
+  "dismiss": "Dismiss",
+  "none": "None",
+  "optional": "Optional",
+  "required": "Required",
+  "invalidValue": "Invalid value",
+  "reason": "Reason",
+  "comment": "Comment",
+  "date": "Date",
+  "today": "Today",
+  "thisMonth": "This month",
+  "depot": "Depot",
+  "employee": "Employee",
+  "moreActions": "More",
+  "filterAll": "All",
+  "cancelled": "Cancelled",
+  "catDriver": "Driver",
+  "catConductor": "Conductor",
+  "catHelper": "Helper",
+  "catMechanic": "Mechanic",
+  "catDepotStaff": "Depot staff",
+  "catOffice": "Office",
+  "empPermanent": "Permanent",
+  "empFixedTerm": "Fixed term",
+  "empContract": "Contract",
+  "statusActive": "Active",
+  "statusOnNotice": "On notice",
+  "statusExited": "Exited",
+  "statusSuspended": "Suspended",
+  "docDrivingLicence": "Driving licence",
+  "docPsvBadge": "PSV badge",
+  "docMedical": "Medical fitness",
+  "docPolice": "Police verification",
+  "docAadhaar": "Aadhaar",
+  "docPan": "PAN",
+  "docTraining": "Training certificate",
+  "docOther": "Other",
+  "docStatusPending": "Pending verification",
+  "docStatusVerified": "Verified",
+  "docStatusRejected": "Rejected",
+  "docStatusExpired": "Expired",
+  "complianceOk": "Documents OK",
+  "complianceExpiring": "Expiring",
+  "compliancePending": "Pending verification",
+  "complianceExpired": "Expired",
+  "complianceMissing": "Missing",
+  "stateValid": "Valid",
+  "stateExpiring": "Expiring",
+  "stateUnverified": "Unverified",
+  "stateExpired": "Expired",
+  "stateRejected": "Rejected",
+  "stateMissing": "Missing",
+  "attPresent": "Present",
+  "attAbsent": "Absent",
+  "attHalfDay": "Half day",
+  "attOnLeave": "On leave",
+  "attWeeklyOff": "Weekly off",
+  "attHoliday": "Holiday",
+  "attOutstation": "On duty (outstation)",
+  "attPresentShort": "P",
+  "attAbsentShort": "A",
+  "attHalfDayShort": "½",
+  "attOnLeaveShort": "L",
+  "attWeeklyOffShort": "WO",
+  "attHolidayShort": "H",
+  "attOutstationShort": "OD",
+  "apprPending": "Pending",
+  "apprApproved": "Approved",
+  "apprRejected": "Rejected",
+  "apprCancelled": "Withdrawn",
+  "entityLeave": "Leave",
+  "entityCorrection": "Attendance correction",
+  "entityAdvance": "Advance",
+  "entitySwap": "Duty swap",
+  "entityRecovery": "Recovery",
+  "entityPolicyException": "Policy exception",
+  "roleDriver": "Driver",
+  "roleCoDriver": "Co-driver",
+  "roleConductor": "Conductor",
+  "roleHelper": "Helper",
+  "employeesSearchHint": "Name, employee code or phone",
+  "employeesEmpty": "No employees match.",
+  "employeesSelectHint": "Select an employee to see their profile.",
+  "employeeProfile": "Employee",
+  "employeeCreated": "{name} added",
+  "@employeeCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "complianceTitle": "Required documents",
+  "noRequiredDocuments": "No documents are required for this category.",
+  "notRosterable": "Cannot be rostered until every required document is valid.",
+  "documentsTitle": "Documents",
+  "noDocuments": "No documents yet.",
+  "validUntil": "Valid until {date}",
+  "@validUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "rejectedBecause": "Rejected: {reason}",
+  "@rejectedBecause": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "viewFile": "View file",
+  "jobHistory": "Job history",
+  "jobFromOpen": "From {from}",
+  "@jobFromOpen": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "jobRange": "{from} – {to}",
+  "@jobRange": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsTo": "Reports to {name}",
+  "@reportsTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personalDetails": "Personal details",
+  "joiningDate": "Joining date",
+  "exitDate": "Exit date",
+  "employmentTypeLabel": "Employment type",
+  "contractor": "Contractor",
+  "aadhaarLast4": "Aadhaar (last 4 digits)",
+  "aadhaarHelper": "Only the last 4 digits are stored.",
+  "aadhaarLast4Invalid": "Enter the last 4 digits",
+  "addDocument": "Add document",
+  "raiseLeave": "Raise leave",
+  "documentSaved": "Document saved. HR will verify it.",
+  "changeJob": "Transfer / change job",
+  "recordExit": "Record exit",
+  "effectiveFrom": "Effective from",
+  "depotUnchanged": "Depot (leave empty to keep)",
+  "designation": "Designation",
+  "grade": "Grade",
+  "lastWorkingDay": "Last working day",
+  "documentTypeLabel": "Document type",
+  "documentNumber": "Document number",
+  "licenceClass": "Licence class",
+  "issueDate": "Issue date",
+  "expiryDate": "Expiry date",
+  "takePhoto": "Take photo",
+  "chooseFile": "Choose photo",
+  "photoRequired": "Take or choose a photo of the document.",
+  "saveForVerification": "Save for verification",
+  "onboardTitle": "Onboard employee",
+  "stepPersonal": "Personal",
+  "stepJob": "Job",
+  "stepStatutory": "Statutory and bank",
+  "stepReview": "Review",
+  "empCode": "Employee ID",
+  "fullName": "Full name",
+  "categoryLabel": "Category",
+  "dob": "Date of birth",
+  "gender": "Gender",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "genderOther": "Other",
+  "channelWhatsapp": "WhatsApp",
+  "channelSms": "SMS",
+  "reportingManager": "Reporting manager",
+  "bankAccount": "Bank account number",
+  "createEmployee": "Create employee",
+  "verifyQueueTitle": "Documents to verify",
+  "verifyQueueEmpty": "Nothing to verify. 🎉",
+  "verifyDocument": "Verify",
+  "reject": "Reject",
+  "rejectDocument": "Reject document",
+  "rejectReason": "Why is it rejected? (the manager will see this)",
+  "noFile": "No file attached",
+  "openFile": "Open file",
+  "unfilledCount": "{count} unfilled",
+  "@unfilledCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "filledCount": "{count} filled",
+  "@filledCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dutiesCount": "{count, plural, =1{1 duty} other{{count} duties}}",
+  "@dutiesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "expiredCount": "{count} expired",
+  "@expiredCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allFilled": "All filled",
+  "pendingToday": "Pending today",
+  "pendingApproval": "Pending approval",
+  "noShowsUnfilled": "No-shows / unfilled today",
+  "depotComparison": "Depots",
+  "unfilled": "Unfilled",
+  "noShows": "No-shows",
+  "attendancePendingShort": "Unmarked",
+  "expiring": "Expiring",
+  "expired": "Expired",
+  "markAllRead": "Mark all read",
+  "noNotifications": "No notifications.",
+  "addDuty": "Add duty",
+  "copyPreviousDay": "Copy previous day",
+  "copyDone": "Roster copied",
+  "copySummary": "{duties} duties and {crew} crew assignments copied. {existing} duties were already there.",
+  "@copySummary": {
+    "placeholders": {
+      "duties": {
+        "type": "int"
+      },
+      "crew": {
+        "type": "int"
+      },
+      "existing": {
+        "type": "int"
+      }
+    }
+  },
+  "copySkipped": "Not copied:",
+  "noDuties": "No duties for this day. Add one or copy the previous day.",
+  "noVehicle": "No vehicle",
+  "duty": "Duty",
+  "crew": "Crew",
+  "noCrew": "No one assigned yet.",
+  "assignRole": "Assign {role}",
+  "@assignRole": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "cancelDuty": "Cancel duty",
+  "assignedWithWarnings": "{name} assigned, with warnings",
+  "@assignedWithWarnings": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "documentsBlock": "{name} cannot be rostered: documents are not valid on this date.",
+  "@documentsBlock": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "trySpares": "Available spares:",
+  "suggestedSpares": "Suggested spares",
+  "noSpares": "No spares available.",
+  "allEmployees": "All employees",
+  "hoursLast7Days": "{hours} h in last 7 days",
+  "@hoursLast7Days": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "dutyTemplate": "Template",
+  "customTimes": "Custom times",
+  "start": "Start",
+  "end": "End",
+  "endsNextDay": "Ends the next day.",
+  "route": "Route",
+  "vehicle": "Vehicle",
+  "vehicles": "Vehicles",
+  "routes": "Routes",
+  "dutyTemplates": "Templates",
+  "addVehicle": "Add vehicle",
+  "addRoute": "Add route",
+  "addTemplate": "Add template",
+  "regNo": "Registration number",
+  "vehicleType": "Type (bus, truck, …)",
+  "capacity": "Capacity",
+  "code": "Code",
+  "name": "Name",
+  "origin": "From",
+  "destination": "To",
+  "minutes": "{count} min",
+  "@minutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "allPresent": "All present",
+  "attendanceSummary": "{marked} of {total} marked · {rostered} rostered",
+  "@attendanceSummary": {
+    "placeholders": {
+      "marked": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "rostered": {
+        "type": "int"
+      }
+    }
+  },
+  "submitMarks": "{count, plural, =0{Nothing to submit} =1{Submit 1 mark} other{Submit {count} marks}}",
+  "@submitMarks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "attendanceSaved": "{count, plural, =1{1 mark saved} other{{count} marks saved}}",
+  "@attendanceSaved": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "editWindowClosed": "The edit window for this day has closed. Request a correction to change a mark.",
+  "noTeam": "No employees at this depot on this date.",
+  "onLeave": "Leave",
+  "pendingSync": "Pending sync",
+  "syncFailed": "Not accepted",
+  "requestCorrection": "Request correction",
+  "notMarked": "Not marked",
+  "offlinePending": "{count, plural, =1{Offline: 1 mark saved on this phone, waiting to sync} other{Offline: {count} marks saved on this phone, waiting to sync}}",
+  "@offlinePending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncingPending": "{count, plural, =1{Sending 1 mark…} other{Sending {count} marks…}}",
+  "@syncingPending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncRejected": "{count, plural, =1{1 mark was not accepted:} other{{count} marks were not accepted:}}",
+  "@syncRejected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "myRequests": "My requests",
+  "newRequest": "New request",
+  "noRequests": "You have not raised any requests.",
+  "leaveRequest": "Leave request",
+  "attendanceCorrection": "Attendance correction",
+  "leaveType": "Leave type",
+  "fromDate": "From",
+  "toDate": "To",
+  "startsMidday": "Starts at mid-day (half day)",
+  "endsMidday": "Ends at mid-day (half day)",
+  "leaveDays": "{days} day(s)",
+  "@leaveDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "leaveAvailable": "Available: {available} day(s) ({pending} pending)",
+  "@leaveAvailable": {
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "pending": {
+        "type": "String"
+      }
+    }
+  },
+  "noBalanceKept": "No balance is kept for this leave type.",
+  "submitForApproval": "Submit for approval",
+  "leaveSubmitted": "Leave submitted for approval",
+  "leaveApproved": "Leave recorded (no approval step applied)",
+  "correctTo": "Correct to",
+  "correctionSubmitted": "Correction submitted for approval",
+  "approvalsInbox": "Approvals",
+  "inboxEmpty": "Nothing waiting for you.",
+  "approve": "Approve",
+  "approvedMessage": "Approved",
+  "rejectedMessage": "Rejected",
+  "raisedBy": "by {name}",
+  "@raisedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "stepOf": "step {step} of {total}",
+  "@stepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "escalated": "escalated",
+  "withdraw": "Withdraw request",
+  "roleDirector": "Director",
+  "catLoadman": "Loadman",
+  "attOnDuty": "On duty (OD)",
+  "attOnDutyShort": "OD",
+  "kindLeave": "Leave",
+  "kindOd": "On duty (OD)",
+  "taskPending": "Pending",
+  "taskOverdue": "Overdue",
+  "taskCompleted": "Completed",
+  "taskNotDone": "Not done",
+  "navLeave": "Leave & OD",
+  "navAllowances": "Allowances",
+  "navPayslips": "Payslips",
+  "navTasks": "Tasks",
+  "navUsers": "Users",
+  "loginInvalid": "Invalid employee ID or password",
+  "loginLocked": "Account locked, try again in {minutes} minutes or contact your Director",
+  "@loginLocked": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "loginDisabled": "Your login is deactivated. Contact your Director.",
+  "empCodeInvalid": "Enter your employee ID, e.g. NLS001",
+  "password": "Password",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+  "passwordRequired": "Enter your password",
+  "signIn": "Sign in",
+  "forgotPasswordHint": "Forgot password? Contact your Director.",
+  "businessUnit": "Business unit",
+  "businessUnits": "Business units",
+  "allBusinessUnits": "All business units",
+  "primary": "primary",
+  "chooseEmployees": "Choose people",
+  "selectedCount": "Done ({count})",
+  "@selectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "myAttendanceToday": "My attendance today",
+  "tapToMark": "Tap to mark",
+  "attendanceToApprove": "Attendance to approve",
+  "leaveToApprove": "Leave / OD to approve",
+  "allowancesToApprove": "Allowances to approve",
+  "myOpenTasks": "My open tasks",
+  "overdueCount": "{count} overdue",
+  "@overdueCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "myToDo": "For me",
+  "attendanceReport": "Attendance report",
+  "leaveAndOdList": "Leave & OD list",
+  "presentToday": "Present today",
+  "todaySummary": "{present} present · {absent} absent · {leave} on leave · {notMarked} not marked",
+  "@todaySummary": {
+    "placeholders": {
+      "present": {
+        "type": "int"
+      },
+      "absent": {
+        "type": "int"
+      },
+      "leave": {
+        "type": "int"
+      },
+      "notMarked": {
+        "type": "int"
+      }
+    }
+  },
+  "pendingApprovals": "Pending approvals",
+  "pendingBreakdown": "Attendance {attendance} · Leave {leave} · Allowances {allowances}",
+  "@pendingBreakdown": {
+    "placeholders": {
+      "attendance": {
+        "type": "int"
+      },
+      "leave": {
+        "type": "int"
+      },
+      "allowances": {
+        "type": "int"
+      }
+    }
+  },
+  "allowancesThisMonth": "Allowances approved this month",
+  "requestedAmount": "Requested {amount}",
+  "@requestedAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksToday": "Today's tasks per operational manager",
+  "notDoneCount": "{count} not done",
+  "@notDoneCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "headcountAsOf": "{count} people · {date}",
+  "@headcountAsOf": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tabTeam": "Team",
+  "tabMine": "Mine",
+  "tabMyAttendance": "My attendance",
+  "tabApprovals": "Approvals",
+  "tabAllotted": "Allotted",
+  "tabCompleted": "Completed",
+  "teamAttendanceSummary": "{marked} of {total} marked",
+  "@teamAttendanceSummary": {
+    "placeholders": {
+      "marked": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "selfMarkSent": "Sent to your reporting manager for approval",
+  "todayDate": "Today, {date}",
+  "@todayDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "approvedBy": "Approved by {name}",
+  "@approvedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "last31Days": "Last 31 days",
+  "noMarksYet": "No attendance marked yet.",
+  "approveAll": "Approve all ({count})",
+  "@approveAll": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "approvedCount": "{count} approved",
+  "@approvedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "corrections": "Corrections",
+  "requestType": "Type",
+  "dates": "Dates",
+  "odLocation": "Location / place of duty",
+  "odPurpose": "Purpose",
+  "time": "Time",
+  "raisedByLabel": "Raised by",
+  "approver": "Approver",
+  "forTeamMember": "For a driver / loadman in my team",
+  "approveNow": "Approve now (I am their approver)",
+  "saveAndApprove": "Save and approve",
+  "newAllowance": "New allowance",
+  "noAllowances": "No allowance requests.",
+  "batchTitle": "{name} · {count} people",
+  "@batchTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "monthlyTotals": "Monthly totals (approved / requested)",
+  "requestsPending": "{count} requests · {pending} pending",
+  "@requestsPending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "pending": {
+        "type": "int"
+      }
+    }
+  },
+  "amountInvalid": "Enter an amount greater than 0",
+  "commentForChangedAmount": "Add a comment explaining the changed amount",
+  "requestedAmountLabel": "Requested",
+  "approvedAmountLabel": "Approved",
+  "viewReceipt": "View receipt",
+  "amountToApprove": "Amount to approve",
+  "allowanceSubmitted": "{count, plural, =1{Allowance sent for approval} other{{count} allowances sent for approval}}",
+  "@allowanceSubmitted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "forMyself": "Myself",
+  "forMyTeam": "My team",
+  "allowanceType": "Allowance type",
+  "amount": "Amount",
+  "amountPerPerson": "Amount per person",
+  "maxAmount": "Up to {amount}",
+  "@maxAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "batchTotal": "Total {amount}",
+  "@batchTotal": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "commentOrVoice": "Add a comment or record a voice note",
+  "receiptPhoto": "Receipt photo",
+  "microphoneDenied": "Allow microphone access to record a voice note.",
+  "voiceNote": "Voice note",
+  "voiceNoteHelp": "Up to 2 minutes",
+  "stop": "Stop",
+  "play": "Play",
+  "pause": "Pause",
+  "noVoiceNote": "No voice note",
+  "record": "Record",
+  "playVoiceNote": "Play voice note",
+  "uploadPayslips": "Upload payslips",
+  "myPayslip": "My payslip",
+  "payslipNotYet": "Your payslip for {month} is not available yet.",
+  "@payslipNotYet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "uploadedOn": "Uploaded {when}",
+  "@uploadedOn": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "view": "View",
+  "allPayslips": "All payslips",
+  "myTeam": "My team",
+  "search": "Search",
+  "noPayslips": "No payslips for this month.",
+  "versions": "Versions",
+  "payPeriod": "Pay period",
+  "payslipNameRule": "File names must be payslip-<employee code>.pdf, for example payslip-NLS1023.pdf. A new upload for the same person and month replaces the earlier one (kept as a version).",
+  "choosePdfs": "Choose PDF files",
+  "filesChosen": "{count} files chosen",
+  "@filesChosen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadingProgress": "Uploading {sent} / {total}…",
+  "@uploadingProgress": {
+    "placeholders": {
+      "sent": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "uploadForPeriod": "Upload for {month}",
+  "@uploadForPeriod": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "matchedCount": "{count} matched",
+  "@matchedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "replacedCount": "{count} replaced",
+  "@replacedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unmatchedCount": "{count} unmatched",
+  "@unmatchedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "invalidCount": "{count} invalid",
+  "@invalidCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "duplicateCount": "{count} duplicates",
+  "@duplicateCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "unmatchedFiles": "Unmatched (not stored)",
+  "invalidFiles": "Invalid (not stored)",
+  "duplicateFiles": "Duplicates (not stored)",
+  "matchedFiles": "Stored",
+  "allotTask": "Allot task",
+  "noTasks": "No tasks.",
+  "highPriority": "High priority",
+  "allottedBy": "Allotted by",
+  "reopened": "Reopened",
+  "submittedAt": "Submitted {when}",
+  "@submittedAt": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "reasonRequiredNotDone": "Give a reason when the task was not done",
+  "taskSubmitted": "Task submitted",
+  "submit": "Submit",
+  "reopenComment": "Comment for reopening",
+  "reopen": "Reopen",
+  "tasksAllotted": "{count, plural, =1{Task allotted} other{{count} tasks allotted}}",
+  "@tasksAllotted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "taskTitle": "Task",
+  "details": "Details",
+  "chooseRms": "Choose regional managers",
+  "everyone": "Everyone",
+  "download": "Download",
+  "downloadExcel": "Excel (.xlsx)",
+  "downloadPdf": "PDF",
+  "muster": "Muster",
+  "summary": "Summary",
+  "noReportRows": "No attendance for this selection.",
+  "resetPassword": "Reset password",
+  "newPassword": "New password",
+  "passwordRule": "At least {min} characters",
+  "@passwordRule": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "newUser": "New user",
+  "lastLogin": "last login {when}",
+  "@lastLogin": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "inactive": "Inactive",
+  "locked": "Locked",
+  "passwordReset": "Password reset. Their sessions were signed out.",
+  "unlocked": "Unlocked",
+  "deactivated": "Deactivated",
+  "activated": "Activated",
+  "unlock": "Unlock",
+  "deactivate": "Deactivate",
+  "activate": "Activate",
+  "userCreated": "{name} can now sign in",
+  "@userCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "role": "Role",
+  "primaryHint": "Tap the circle to choose the primary business unit (own attendance, leave and payslips belong to it).",
+  "reportsToLabel": "Reports to ({role})",
+  "@reportsToLabel": {
+    "placeholders": {
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "initialPassword": "Initial password",
+  "createUser": "Create user",
+  "email": "Email",
+  "passwordByDirector": "To change your password, contact your Director.",
+  "signOutConfirm": "Sign out of this device?",
+  "appVersion": "App version {version}",
+  "@appVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "peopleCount": "{count, plural, =1{1 person} other{{count} people}}",
+  "@peopleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}

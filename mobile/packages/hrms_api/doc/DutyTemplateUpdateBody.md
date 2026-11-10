@@ -1,0 +1,20 @@
+# hrms_api.model.DutyTemplateUpdateBody
+
+## Load the model package
+```dart
+import 'package:hrms_api/api.dart';
+```
+
+## Properties
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**name** | **String** |  | [optional] 
+**startTime** | **String** |  | [optional] 
+**endTime** | **String** |  | [optional] 
+**crossesMidnight** | **bool** |  | [optional] 
+**routeId** | **String** |  | [optional] 
+**archived** | **bool** |  | [optional] 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
+
