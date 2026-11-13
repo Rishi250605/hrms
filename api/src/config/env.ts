@@ -79,13 +79,8 @@ export const EnvSchema = z
       if (env.STORAGE_DRIVER === 'local') {
         ctx.addIssue({ code: 'custom', path: ['STORAGE_DRIVER'], message: 'local storage is not allowed in production' });
       }
-      if (env.MESSAGING_PROVIDER === 'console') {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['MESSAGING_PROVIDER'],
-          message: 'console messaging is not allowed in production',
-        });
-      }
+      // MESSAGING_PROVIDER=console is allowed in production: nothing sends SMS/WhatsApp since OTP login
+      // was removed in phase 2. TODO(business): refuse 'console' again once a real provider adapter exists.
     }
   });
 

@@ -21,7 +21,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**', 'prisma/**'],
+    files: ['scripts/**', 'prisma/**', 'src/run-job.ts'],
     rules: { 'no-console': 'off' },
   },
 );

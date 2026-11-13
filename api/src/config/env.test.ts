@@ -23,8 +23,9 @@ describe('parseEnv', () => {
   });
 
   it('refuses dev-only settings in production', () => {
-    expect(() => parseEnv({ ...valid, NODE_ENV: 'production', STORAGE_DRIVER: 'local', MESSAGING_PROVIDER: 'console' })).toThrow(/STORAGE_DRIVER/);
-    expect(() => parseEnv({ ...valid, NODE_ENV: 'production' })).toThrow(/MESSAGING_PROVIDER/);
+    expect(() => parseEnv({ ...valid, NODE_ENV: 'production', STORAGE_DRIVER: 'local' })).toThrow(/STORAGE_DRIVER/);
+    // Console messaging is allowed in production (nothing sends messages since phase 2).
+    expect(parseEnv({ ...valid, NODE_ENV: 'production', MESSAGING_PROVIDER: 'console' }).MESSAGING_PROVIDER).toBe('console');
   });
 
   it('parses CORS origins as a list', () => {

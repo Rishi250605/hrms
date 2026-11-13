@@ -314,7 +314,8 @@ cp .env.example .env   # then fill in secrets; TEST_DATABASE_URL must differ fro
 npm i                  # also runs `prisma generate` (client → src/generated/prisma)
 npm run dev            # API with watch
 npm run worker         # BullMQ worker (needs Redis)
-npm run job -- document-expiry   # run one job once without Redis (also: employee-exits, leave-accrual, purge-expired-auth)
+npm run job -- document-expiry   # run jobs once without Redis, in order (also: employee-exits, leave-accrual, purge-expired-auth)
+npm run build && npm start       # compiled API (dist/); npm run start:worker | npm run job:prod -- <names> for the worker / one-off jobs
 npm run db:migrate     # prisma migrate dev
 npm run db:deploy      # prisma migrate deploy
 npm run db:check       # fails if migrations and schema.prisma differ
@@ -324,6 +325,7 @@ npm run lint && npm run typecheck && npm test   # test = unit + integration (int
 npm run test:unit      # no database needed (includes the audit-coverage check)
 npm run test:perf      # load test: attendance report at 1,000 employees × 31 days (test database)
 npm run smoke          # end-to-end smoke against a running API with the demo seed (API_URL=… to target another host)
+# deploy: render.yaml (Render Blueprint) + api/DEPLOY.md; DB = Neon (DATABASE_URL pooled, DIRECT_URL for migrations)
 
 # mobile
 cd mobile
@@ -395,3 +397,4 @@ Still open (all built as settings / `TODO(business)`, listed in docs/phase-2-sum
 - 2026-11-10 Load test: `npm run test:perf` (separate vitest project) seeds 1,000 staff × 31 days of marks; budgets JSON 3 s, xlsx 15 s, PDF 20 s, dashboard 3 s. Measured on the dev laptop: JSON 0.3 s, xlsx 0.5 s, PDF 1.1 s, dashboard 0.5 s.
 - 2026-11-10 `npm run smoke` drives the main flows end to end (every role logs in; attendance, leave, allowance, task, payslip upload + download, report exports, visibility spot checks) against a running API with the demo seed.
 - 2026-11-10 Flutter UI: themed Material 3 (rounded filled inputs, tonal cards, hero header on Home, app-bar avatar → My Profile with app version, sign-out confirmation). Spec wording for login errors and the password note. Gradle heap lowered to 2 GB (the 8 GB template default got builds killed on the 8 GB dev machine); `RECORD_AUDIO` permission added for voice notes.
+- 2026-11-13 Hosting (initial): API on Render (Blueprint `render.yaml`, Singapore) with Neon Postgres (ap-southeast-1); Indian-region production still planned (§3). Migrations run in the Render build via `prisma migrate deploy` over `DIRECT_URL` (Neon non-pooled; `prisma.config.ts` falls back to `DATABASE_URL`). Scheduled jobs run as one nightly Render cron (`npm run job:prod -- <names…>`, `src/run-job.ts` runs several in order) instead of the BullMQ worker + Redis; leave accrual is idempotent per month, so it runs nightly. `MESSAGING_PROVIDER=console` is allowed in production because nothing sends messages since OTP login was removed (TODO(business): refuse it again once a provider exists). Never seed demo logins into a deployed database.

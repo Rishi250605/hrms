@@ -1,0 +1,110 @@
+# Render Blueprint for the HRMS API (Dashboard → New → Blueprint → pick this repo).
+# Region: Singapore, next to the Neon database (ap-southeast-1). Render has no Indian region;
+# CLAUDE.md §3: production moves to AWS/Azure Mumbai/Pune later.
+#
+# On first sync Render asks for every `sync: false` value (see api/DEPLOY.md).
+
+envVarGroups:
+  - name: hrms-api-shared
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: LOG_LEVEL
+        value: info
+      # Render terminates TLS in one proxy hop in front of the service.
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      # Generated once by Render (base64, 256-bit). Rotating JWT_ACCESS_SECRET logs everyone out after 15 min;
+      # rotating TOKEN_HASH_PEPPER invalidates all refresh tokens.
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: TOKEN_HASH_PEPPER
+        generateValue: true
+      - key: MESSAGING_PROVIDER
+        value: console
+      - key: PUSH_PROVIDER
+        value: console
+      - key: STORAGE_DRIVER
+        value: s3
+      # Cloudflare R2 uses "auto" (AWS S3 Mumbai would be ap-south-1).
+      - key: S3_REGION
+        value: auto
+      - key: S3_BUCKET
+        value: hrms-documents
+      - key: S3_FORCE_PATH_STYLE
+        value: "true"
+      - key: SIGNED_URL_TTL_SECONDS
+        value: "600"
+
+services:
+  - type: web
+    name: hrms-api
+    runtime: node
+    rootDir: api
+    region: singapore
+    # Free instances sleep after 15 idle minutes (≈1 min cold start); use starter or above for real use.
+    plan: free
+    # Migrations run during the build (preDeployCommand needs a paid plan). Prisma uses DIRECT_URL for them.
+    buildCommand: npm ci --include=dev && npm run build && npx prisma migrate deploy
+    startCommand: npm start
+    healthCheckPath: /api/v1/health/ready
+    autoDeploy: true
+    envVars:
+      - fromGroup: hrms-api-shared
+      # Neon pooled URL (host contains "-pooler"), used by the app.
+      - key: DATABASE_URL
+        sync: false
+      # Neon direct URL (same, without "-pooler"), used only by prisma migrate.
+      - key: DIRECT_URL
+        sync: false
+      # 32 bytes base64. NEVER change it once data exists: PAN / bank numbers become unreadable. Keep a copy offline.
+      - key: DATA_ENCRYPTION_KEY
+        sync: false
+      # Leave empty for AWS S3; set for Cloudflare R2 (https://<account>.r2.cloudflarestorage.com) etc.
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
+
+  # Nightly maintenance at 00:05 IST (18:35 UTC). Replaces the BullMQ worker + Redis on Render.
+  # leave-accrual is idempotent per month, so running it nightly credits once on the 1st (and catches up if a run is missed).
+  - type: cron
+    name: hrms-nightly-jobs
+    runtime: node
+    rootDir: api
+    region: singapore
+    plan: starter
+    schedule: "35 18 * * *"
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run job:prod -- employee-exits document-expiry leave-accrual purge-expired-auth
+    envVars:
+      - fromGroup: hrms-api-shared
+      - key: DATABASE_URL
+        fromService:
+          type: web
+          name: hrms-api
+          envVarKey: DATABASE_URL
+      - key: DATA_ENCRYPTION_KEY
+        fromService:
+          type: web
+          name: hrms-api
+          envVarKey: DATA_ENCRYPTION_KEY
+      - key: S3_ENDPOINT
+        fromService:
+          type: web
+          name: hrms-api
+          envVarKey: S3_ENDPOINT
+      - key: S3_ACCESS_KEY_ID
+        fromService:
+          type: web
+          name: hrms-api
+          envVarKey: S3_ACCESS_KEY_ID
+      - key: S3_SECRET_ACCESS_KEY
+        fromService:
+          type: web
+          name: hrms-api
+          envVarKey: S3_SECRET_ACCESS_KEY
