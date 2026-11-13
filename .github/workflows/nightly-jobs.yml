@@ -1,0 +1,52 @@
+# Nightly maintenance jobs against the production database (free alternative to a Render cron / BullMQ worker).
+# Runs: employee exits, document expiry + alerts, leave accrual (idempotent per month), purge of expired auth rows.
+# Repository secrets required: PROD_DATABASE_URL (Neon pooled URL), PROD_DATA_ENCRYPTION_KEY (same as Render).
+name: Nightly jobs
+
+on:
+  schedule:
+    - cron: "35 18 * * *" # 00:05 IST (GitHub may start scheduled runs a few minutes late)
+  workflow_dispatch: # "Run workflow" button for a manual run
+
+concurrency:
+  group: nightly-jobs
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    name: Run maintenance jobs
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: api
+    env:
+      NODE_ENV: production
+      LOG_LEVEL: info
+      DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+      DATA_ENCRYPTION_KEY: ${{ secrets.PROD_DATA_ENCRYPTION_KEY }}
+      MESSAGING_PROVIDER: console
+      PUSH_PROVIDER: console
+      STORAGE_DRIVER: s3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - name: Check secrets
+        run: |
+          test -n "$DATABASE_URL" || { echo "::error::PROD_DATABASE_URL secret is not set"; exit 1; }
+          test -n "$DATA_ENCRYPTION_KEY" || { echo "::error::PROD_DATA_ENCRYPTION_KEY secret is not set"; exit 1; }
+      # The jobs never sign tokens or URLs, but env validation requires these: use throwaway values.
+      - name: Throwaway signing secrets
+        run: |
+          echo "JWT_ACCESS_SECRET=$(openssl rand -base64 48)" >> "$GITHUB_ENV"
+          echo "TOKEN_HASH_PEPPER=$(openssl rand -base64 48)" >> "$GITHUB_ENV"
+      - run: npm ci --include=dev
+      - run: npm run build
+      - run: npm run job:prod -- employee-exits document-expiry leave-accrual purge-expired-auth

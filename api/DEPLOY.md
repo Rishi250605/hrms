@@ -5,7 +5,7 @@ The Blueprint is `../render.yaml`. It creates:
 | Render resource | What it runs |
 | --- | --- |
 | `hrms-api` (web service) | `npm ci --include=dev && npm run build && npx prisma migrate deploy`, then `npm start`; health check `/api/v1/health/ready` |
-| `hrms-nightly-jobs` (cron, 00:05 IST) | `npm run job:prod -- employee-exits document-expiry leave-accrual purge-expired-auth` (replaces the BullMQ worker + Redis) |
+| GitHub Actions `nightly-jobs.yml` (00:05 IST, free) | `npm run job:prod -- employee-exits document-expiry leave-accrual purge-expired-auth` (replaces the BullMQ worker + Redis); needs repo secrets `PROD_DATABASE_URL`, `PROD_DATA_ENCRYPTION_KEY` |
 | `hrms-api-shared` (env group) | non-secret config + generated `JWT_ACCESS_SECRET` / `TOKEN_HASH_PEPPER` |
 
 ## Before the first deploy
@@ -50,4 +50,4 @@ flutter build apk --release --dart-define=API_BASE_URL=https://<service>.onrende
 - Region: Render has no Indian region; the Blueprint uses Singapore next to Neon `ap-southeast-1`. CLAUDE.md §3 still targets AWS/Azure Mumbai/Pune for production (DPDP).
 - The free web plan sleeps after 15 idle minutes (≈1 min cold start). Use `starter` for daily use.
 - Push notifications: set `PUSH_PROVIDER=fcm` and `FCM_SERVICE_ACCOUNT_B64` on `hrms-api` when Firebase is ready.
-- To run a job by hand: Render Shell on `hrms-api` → `npm run job:prod -- document-expiry`.
+- To run the jobs by hand: GitHub → Actions → Nightly jobs → Run workflow. GitHub disables scheduled workflows after 60 days without repository activity in public repos; re-enable it there if that happens.

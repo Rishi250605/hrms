@@ -70,41 +70,5 @@ services:
       - key: S3_SECRET_ACCESS_KEY
         sync: false
 
-  # Nightly maintenance at 00:05 IST (18:35 UTC). Replaces the BullMQ worker + Redis on Render.
-  # leave-accrual is idempotent per month, so running it nightly credits once on the 1st (and catches up if a run is missed).
-  - type: cron
-    name: hrms-nightly-jobs
-    runtime: node
-    rootDir: api
-    region: singapore
-    plan: starter
-    schedule: "35 18 * * *"
-    buildCommand: npm ci --include=dev && npm run build
-    startCommand: npm run job:prod -- employee-exits document-expiry leave-accrual purge-expired-auth
-    envVars:
-      - fromGroup: hrms-api-shared
-      - key: DATABASE_URL
-        fromService:
-          type: web
-          name: hrms-api
-          envVarKey: DATABASE_URL
-      - key: DATA_ENCRYPTION_KEY
-        fromService:
-          type: web
-          name: hrms-api
-          envVarKey: DATA_ENCRYPTION_KEY
-      - key: S3_ENDPOINT
-        fromService:
-          type: web
-          name: hrms-api
-          envVarKey: S3_ENDPOINT
-      - key: S3_ACCESS_KEY_ID
-        fromService:
-          type: web
-          name: hrms-api
-          envVarKey: S3_ACCESS_KEY_ID
-      - key: S3_SECRET_ACCESS_KEY
-        fromService:
-          type: web
-          name: hrms-api
-          envVarKey: S3_SECRET_ACCESS_KEY
+# Nightly maintenance jobs run in GitHub Actions (.github/workflows/nightly-jobs.yml), not on Render,
+# so the Blueprint needs no paid service.
