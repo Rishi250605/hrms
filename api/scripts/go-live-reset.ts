@@ -92,7 +92,9 @@ async function main() {
       await tx.employee.deleteMany({ where: { NOT: { id: keepEmployee } } });
       // The director's own job rows (if any) point at a depot; they go with the demo depots.
       await tx.employeeJob.deleteMany({ where: { employeeId: keepEmployee } });
-      await tx.$executeRawUnsafe(`TRUNCATE TABLE ${WIPE_AFTER.map((t) => `"${t}"`).join(', ')}`);
+      // DELETE, not TRUNCATE: Postgres refuses to truncate a table that any foreign key points at, even from empty tables.
+      await tx.depot.deleteMany({});
+      await tx.region.deleteMany({});
       await tx.user.update({
         where: { id: director.id },
         data: { passwordHash, passwordChangedAt: new Date(), failedLoginCount: 0, failedWindowStartedAt: null, lockedUntil: null, isActive: true },
