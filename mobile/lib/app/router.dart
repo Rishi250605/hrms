@@ -25,6 +25,7 @@ import '../features/requests/presentation/leave_form_screen.dart';
 import '../features/requests/presentation/requests_screen.dart';
 import '../features/roster/presentation/fleet_screen.dart';
 import '../features/roster/presentation/roster_screen.dart';
+import '../features/settings/presentation/depots_screen.dart';
 import '../features/settings/presentation/more_screen.dart';
 import '../features/tasks/presentation/task_form_screen.dart';
 import '../features/tasks/presentation/tasks_screen.dart';
@@ -149,6 +150,7 @@ GoRouter router(Ref ref) {
           ),
           GoRoute(path: AppDestination.documents.path, pageBuilder: (_, _) => _page(const VerificationQueueScreen())),
           GoRoute(path: AppDestination.roster.path, pageBuilder: (_, _) => _page(const RosterScreen())),
+          GoRoute(path: AppDestination.depots.path, pageBuilder: (_, _) => _page(const DepotsScreen())),
           GoRoute(path: AppDestination.fleet.path, pageBuilder: (_, _) => _page(const FleetScreen())),
           GoRoute(path: AppDestination.notifications.path, pageBuilder: (_, _) => _page(const NotificationsScreen())),
           GoRoute(

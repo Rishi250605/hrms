@@ -3195,6 +3195,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose 1 to 5 stars'**
   String get performanceSelectRating;
+
+  /// No description provided for @addDepot.
+  ///
+  /// In en, this message translates to:
+  /// **'Add depot'**
+  String get addDepot;
+
+  /// No description provided for @addRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Add region'**
+  String get addRegion;
+
+  /// No description provided for @noDepotsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No depots yet. Add one before creating users or employees.'**
+  String get noDepotsYet;
+
+  /// No description provided for @depotCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Depot added'**
+  String get depotCreated;
+
+  /// No description provided for @regionName.
+  ///
+  /// In en, this message translates to:
+  /// **'Region name'**
+  String get regionName;
+
+  /// No description provided for @codeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Code'**
+  String get codeLabel;
+
+  /// No description provided for @depotName.
+  ///
+  /// In en, this message translates to:
+  /// **'Depot name'**
+  String get depotName;
+
+  /// No description provided for @stateCode.
+  ///
+  /// In en, this message translates to:
+  /// **'State code (2 letters, e.g. MH)'**
+  String get stateCode;
+
+  /// No description provided for @baseDepot.
+  ///
+  /// In en, this message translates to:
+  /// **'Base depot'**
+  String get baseDepot;
+
+  /// No description provided for @noDepotsForBu.
+  ///
+  /// In en, this message translates to:
+  /// **'No depot in this business unit yet. Add one under More → Depots first.'**
+  String get noDepotsForBu;
+
+  /// No description provided for @region.
+  ///
+  /// In en, this message translates to:
+  /// **'Region'**
+  String get region;
 }
 
 class _AppLocalizationsDelegate

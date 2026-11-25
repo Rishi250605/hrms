@@ -1067,5 +1067,16 @@
     }
   },
   "performanceInvalidNumber": "Enter a number (0 or more)",
-  "performanceSelectRating": "Choose 1 to 5 stars"
+  "performanceSelectRating": "Choose 1 to 5 stars",
+  "addDepot": "Add depot",
+  "addRegion": "Add region",
+  "noDepotsYet": "No depots yet. Add one before creating users or employees.",
+  "depotCreated": "Depot added",
+  "regionName": "Region name",
+  "codeLabel": "Code",
+  "depotName": "Depot name",
+  "stateCode": "State code (2 letters, e.g. MH)",
+  "baseDepot": "Base depot",
+  "noDepotsForBu": "No depot in this business unit yet. Add one under More → Depots first.",
+  "region": "Region"
 }

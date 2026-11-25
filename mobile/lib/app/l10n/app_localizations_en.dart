@@ -1771,4 +1771,39 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get performanceSelectRating => 'Choose 1 to 5 stars';
+
+  @override
+  String get addDepot => 'Add depot';
+
+  @override
+  String get addRegion => 'Add region';
+
+  @override
+  String get noDepotsYet =>
+      'No depots yet. Add one before creating users or employees.';
+
+  @override
+  String get depotCreated => 'Depot added';
+
+  @override
+  String get regionName => 'Region name';
+
+  @override
+  String get codeLabel => 'Code';
+
+  @override
+  String get depotName => 'Depot name';
+
+  @override
+  String get stateCode => 'State code (2 letters, e.g. MH)';
+
+  @override
+  String get baseDepot => 'Base depot';
+
+  @override
+  String get noDepotsForBu =>
+      'No depot in this business unit yet. Add one under More → Depots first.';
+
+  @override
+  String get region => 'Region';
 }

@@ -4,6 +4,7 @@ import 'package:hrms_api/hrms_api.dart';
 
 import '../../../app/l10n/app_localizations.dart';
 import '../../../core/labels.dart';
+import '../../../core/org/org_repository.dart';
 import '../../../core/session.dart';
 import '../../../core/widgets/async_view.dart';
 import '../../auth/domain/current_user.dart';
@@ -38,6 +39,7 @@ class _UserFormScreenState extends ConsumerState<UserFormScreen> {
   final _designation = TextEditingController();
   final _password = TextEditingController();
   PickedEmployee? _reportsTo;
+  String? _depotId;
   bool _saving = false;
   bool _tried = false;
 
@@ -66,7 +68,8 @@ class _UserFormScreenState extends ConsumerState<UserFormScreen> {
         _code.text.trim().isEmpty ||
         _name.text.trim().length < 2 ||
         phone.length < 10 ||
-        _password.text.length < kMinPasswordLength) {
+        _password.text.length < kMinPasswordLength ||
+        _depotId == null) {
       return;
     }
     if (reportsToRole(_role) != Role.DIRECTOR && _reportsTo == null) return;
@@ -82,6 +85,7 @@ class _UserFormScreenState extends ConsumerState<UserFormScreen> {
               role: _role,
               businessUnitIds: _bus.toList(),
               primaryBusinessUnitId: _primary,
+              depotId: _depotId,
               reportingToEmployeeId: _reportsTo?.id ?? (reportsToRole(_role) == Role.DIRECTOR ? ref.read(currentUserProvider)?.employeeId : null),
               designation: _designation.text.trim().isEmpty ? null : _designation.text.trim(),
               password: _password.text,
@@ -182,6 +186,8 @@ class _UserFormScreenState extends ConsumerState<UserFormScreen> {
             decoration: InputDecoration(labelText: '${l10n.designation} (${l10n.optional})'),
           ),
           const SizedBox(height: 12),
+          _depotField(context, l10n),
+          const SizedBox(height: 12),
           if (boss != null && boss != Role.DIRECTOR)
             EmployeePickerField(
               key: const Key('user.reportsTo'),
@@ -204,6 +210,36 @@ class _UserFormScreenState extends ConsumerState<UserFormScreen> {
           FilledButton(key: const Key('user.save'), onPressed: _saving ? null : _submit, child: Text(l10n.createUser)),
         ],
       ),
+    );
+  }
+
+  /// Base depot (required by the API): depots of the primary business unit.
+  Widget _depotField(BuildContext context, AppLocalizations l10n) {
+    final all = ref.watch(allDepotsProvider);
+    return AsyncView<List<DepotItem>>(
+      value: all,
+      onRetry: () => ref.invalidate(allDepotsProvider),
+      data: (list) {
+        final depots = list.where((d) => d.businessUnitId == _primary).toList();
+        // Keep the choice valid for the primary BU; pick the only depot automatically.
+        final value = depots.any((d) => d.id == _depotId) ? _depotId : (depots.length == 1 ? depots.first.id : null);
+        if (value != _depotId) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) setState(() => _depotId = value);
+          });
+        }
+        if (_primary != null && depots.isEmpty) {
+          return Text(l10n.noDepotsForBu, key: const Key('user.noDepots'), style: TextStyle(color: Theme.of(context).colorScheme.error));
+        }
+        return DropdownButtonFormField<String>(
+          key: Key('user.depot.$_primary.$value'),
+          isExpanded: true,
+          initialValue: value,
+          decoration: InputDecoration(labelText: l10n.baseDepot, errorText: _tried && _depotId == null ? l10n.required : null),
+          items: [for (final d in depots) DropdownMenuItem(value: d.id, child: Text('${d.code} · ${d.name}'))],
+          onChanged: (v) => setState(() => _depotId = v),
+        );
+      },
     );
   }
 }

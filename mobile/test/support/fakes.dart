@@ -349,7 +349,7 @@ class FakeDashboardRepository implements DashboardRepository {
   Future<void> markAllRead() async {}
 }
 
-class FakeOrgRepository implements OrgRepository {
+class FakeOrgRepository with Unimplemented implements OrgRepository {
   @override
   Future<List<BusinessUnitItem>> businessUnits() async => [
     BusinessUnitItem.fromJson({...nlsJson, 'isActive': true}),

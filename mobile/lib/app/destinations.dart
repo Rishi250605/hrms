@@ -20,6 +20,7 @@ enum AppDestination {
   roster('/roster', Icons.calendar_view_day_outlined, Icons.calendar_view_day),
   fleet('/fleet', Icons.local_shipping_outlined, Icons.local_shipping),
   performance('/performance', Icons.star_outline_rounded, Icons.star_rounded),
+  depots('/depots', Icons.warehouse_outlined, Icons.warehouse),
   notifications('/notifications', Icons.notifications_outlined, Icons.notifications),
   profile('/profile', Icons.person_outline, Icons.person),
   more('/more', Icons.menu, Icons.menu_open);
@@ -44,6 +45,7 @@ enum AppDestination {
     roster => l10n.navRoster,
     fleet => l10n.navFleet,
     performance => l10n.navPerformance,
+    depots => l10n.navDepots,
     notifications => l10n.navNotifications,
     profile => l10n.profileTitle,
     more => l10n.navMore,
@@ -67,6 +69,7 @@ List<AppDestination> secondaryDestinationsFor(UserRole role) => switch (role) {
     AppDestination.tasks,
     AppDestination.performance,
     AppDestination.employees,
+    AppDestination.depots,
     AppDestination.roster,
     AppDestination.fleet,
     AppDestination.notifications,

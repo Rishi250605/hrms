@@ -1,7 +1,7 @@
 name: hrms_app
 description: "FleetHR - internal manager app (director, HR, operational and regional managers)."
 publish_to: 'none'
-version: 1.0.0+2
+version: 1.0.1+3
 
 environment:
   sdk: ^3.13.7
