@@ -12,10 +12,24 @@ part of 'allowances_providers.dart';
 @ProviderFor(allowances)
 final allowancesProvider = AllowancesFamily._();
 
-final class AllowancesProvider extends $FunctionalProvider<AsyncValue<AllowancePage>, AllowancePage, FutureOr<AllowancePage>>
+final class AllowancesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<AllowancePage>,
+          AllowancePage,
+          FutureOr<AllowancePage>
+        >
     with $FutureModifier<AllowancePage>, $FutureProvider<AllowancePage> {
-  AllowancesProvider._({required AllowancesFamily super.from, required String super.argument})
-    : super(retry: null, name: r'allowancesProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  AllowancesProvider._({
+    required AllowancesFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'allowancesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$allowancesHash();
@@ -29,7 +43,9 @@ final class AllowancesProvider extends $FunctionalProvider<AsyncValue<AllowanceP
 
   @$internal
   @override
-  $FutureProviderElement<AllowancePage> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<AllowancePage> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<AllowancePage> create(Ref ref) {
@@ -50,10 +66,19 @@ final class AllowancesProvider extends $FunctionalProvider<AsyncValue<AllowanceP
 
 String _$allowancesHash() => r'33bba861c97fe3844fb11d2dc3e3c719d7cf8a69';
 
-final class AllowancesFamily extends $Family with $FunctionalFamilyOverride<FutureOr<AllowancePage>, String> {
-  AllowancesFamily._() : super(retry: null, name: r'allowancesProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class AllowancesFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<AllowancePage>, String> {
+  AllowancesFamily._()
+    : super(
+        retry: null,
+        name: r'allowancesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  AllowancesProvider call(String scope) => AllowancesProvider._(argument: scope, from: this);
+  AllowancesProvider call(String scope) =>
+      AllowancesProvider._(argument: scope, from: this);
 
   @override
   String toString() => r'allowancesProvider';
@@ -62,8 +87,16 @@ final class AllowancesFamily extends $Family with $FunctionalFamilyOverride<Futu
 @ProviderFor(allowanceTypes)
 final allowanceTypesProvider = AllowanceTypesProvider._();
 
-final class AllowanceTypesProvider extends $FunctionalProvider<AsyncValue<List<AllowanceTypeItem>>, List<AllowanceTypeItem>, FutureOr<List<AllowanceTypeItem>>>
-    with $FutureModifier<List<AllowanceTypeItem>>, $FutureProvider<List<AllowanceTypeItem>> {
+final class AllowanceTypesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<AllowanceTypeItem>>,
+          List<AllowanceTypeItem>,
+          FutureOr<List<AllowanceTypeItem>>
+        >
+    with
+        $FutureModifier<List<AllowanceTypeItem>>,
+        $FutureProvider<List<AllowanceTypeItem>> {
   AllowanceTypesProvider._()
     : super(
         from: null,
@@ -80,7 +113,9 @@ final class AllowanceTypesProvider extends $FunctionalProvider<AsyncValue<List<A
 
   @$internal
   @override
-  $FutureProviderElement<List<AllowanceTypeItem>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<AllowanceTypeItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<AllowanceTypeItem>> create(Ref ref) {
@@ -93,10 +128,24 @@ String _$allowanceTypesHash() => r'702eba1aba4acabb625c8311153575e500849330';
 @ProviderFor(allowanceSummary)
 final allowanceSummaryProvider = AllowanceSummaryFamily._();
 
-final class AllowanceSummaryProvider extends $FunctionalProvider<AsyncValue<AllowanceSummary>, AllowanceSummary, FutureOr<AllowanceSummary>>
+final class AllowanceSummaryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<AllowanceSummary>,
+          AllowanceSummary,
+          FutureOr<AllowanceSummary>
+        >
     with $FutureModifier<AllowanceSummary>, $FutureProvider<AllowanceSummary> {
-  AllowanceSummaryProvider._({required AllowanceSummaryFamily super.from, required String super.argument})
-    : super(retry: null, name: r'allowanceSummaryProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  AllowanceSummaryProvider._({
+    required AllowanceSummaryFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'allowanceSummaryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$allowanceSummaryHash();
@@ -110,7 +159,9 @@ final class AllowanceSummaryProvider extends $FunctionalProvider<AsyncValue<Allo
 
   @$internal
   @override
-  $FutureProviderElement<AllowanceSummary> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<AllowanceSummary> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<AllowanceSummary> create(Ref ref) {
@@ -131,10 +182,19 @@ final class AllowanceSummaryProvider extends $FunctionalProvider<AsyncValue<Allo
 
 String _$allowanceSummaryHash() => r'33d897c9894457ae5d710c160eec94f15a472f1a';
 
-final class AllowanceSummaryFamily extends $Family with $FunctionalFamilyOverride<FutureOr<AllowanceSummary>, String> {
-  AllowanceSummaryFamily._() : super(retry: null, name: r'allowanceSummaryProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class AllowanceSummaryFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<AllowanceSummary>, String> {
+  AllowanceSummaryFamily._()
+    : super(
+        retry: null,
+        name: r'allowanceSummaryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  AllowanceSummaryProvider call(String month) => AllowanceSummaryProvider._(argument: month, from: this);
+  AllowanceSummaryProvider call(String month) =>
+      AllowanceSummaryProvider._(argument: month, from: this);
 
   @override
   String toString() => r'allowanceSummaryProvider';

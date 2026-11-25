@@ -15,18 +15,28 @@ final appVersionProvider = AppVersionProvider._();
 
 /// "1.2.0 (7)", or null where the platform cannot tell (tests, unsupported platforms).
 
-final class AppVersionProvider extends $FunctionalProvider<AsyncValue<String?>, String?, FutureOr<String?>>
+final class AppVersionProvider
+    extends $FunctionalProvider<AsyncValue<String?>, String?, FutureOr<String?>>
     with $FutureModifier<String?>, $FutureProvider<String?> {
   /// "1.2.0 (7)", or null where the platform cannot tell (tests, unsupported platforms).
   AppVersionProvider._()
-    : super(from: null, argument: null, retry: null, name: r'appVersionProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appVersionProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$appVersionHash();
 
   @$internal
   @override
-  $FutureProviderElement<String?> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<String?> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<String?> create(Ref ref) {

@@ -13,7 +13,6 @@ class SplashScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final session = ref.watch(sessionControllerProvider);
-    final theme = Theme.of(context);
 
     return Scaffold(
       body: Center(
@@ -22,9 +21,7 @@ class SplashScreen extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CompanyLogo(size: 80),
-              const SizedBox(height: 16),
-              Text(l10n.appTitle, style: theme.textTheme.headlineSmall),
+              const CompanyLogo(size: 140),
               const SizedBox(height: 24),
               if (session.hasError && !session.isLoading) ...[
                 Text(l10n.sessionLoadFailed, textAlign: TextAlign.center),

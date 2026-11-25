@@ -11,6 +11,7 @@ config({ quiet: true });
 
 process.env.NODE_ENV = 'test';
 process.env.DATABASE_URL = process.env.TEST_DATABASE_URL ?? 'postgresql://hrms:hrms@localhost:5432/hrms_test';
+process.env.DIRECT_URL = process.env.DATABASE_URL;
 process.env.JWT_ACCESS_SECRET = 'test-access-secret-0123456789-0123456789';
 process.env.TOKEN_HASH_PEPPER = 'test-token-pepper-0123456789-0123456789';
 process.env.DATA_ENCRYPTION_KEY = Buffer.alloc(32, 7).toString('base64');

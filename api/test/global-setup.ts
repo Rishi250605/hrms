@@ -19,6 +19,7 @@ export default function setup() {
   }
   execSync('npx prisma migrate deploy', {
     stdio: 'inherit',
-    env: { ...process.env, DATABASE_URL: url },
+    // prisma.config.ts prefers DIRECT_URL (the production non-pooled URL in a deploy-ready .env), so override both.
+    env: { ...process.env, DATABASE_URL: url, DIRECT_URL: url },
   });
 }

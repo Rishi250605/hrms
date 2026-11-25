@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.transporthrms" "\0"
-            VALUE "FileDescription", "hrms_app" "\0"
+            VALUE "FileDescription", "FleetHR" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "hrms_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 com.transporthrms. All rights reserved." "\0"
             VALUE "OriginalFilename", "hrms_app.exe" "\0"
-            VALUE "ProductName", "hrms_app" "\0"
+            VALUE "ProductName", "FleetHR" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

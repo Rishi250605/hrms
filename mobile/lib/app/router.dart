@@ -17,6 +17,7 @@ import '../features/employees/presentation/onboarding_wizard_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import '../features/notifications/presentation/notifications_screen.dart';
 import '../features/payslips/presentation/payslip_upload_screen.dart';
+import '../features/performance/presentation/performance_screens.dart';
 import '../features/payslips/presentation/payslips_screen.dart';
 import '../features/reports/presentation/reports_screen.dart';
 import '../features/requests/presentation/correction_form_screen.dart';
@@ -29,6 +30,7 @@ import '../features/tasks/presentation/task_form_screen.dart';
 import '../features/tasks/presentation/tasks_screen.dart';
 import '../features/users/presentation/user_form_screen.dart';
 import '../features/users/presentation/users_screen.dart';
+import '../core/session.dart';
 import 'destinations.dart';
 import 'role_shell.dart';
 
@@ -46,6 +48,9 @@ abstract final class Routes {
   static const uploadPayslips = '/payslips/upload';
   static const newTask = '/tasks/new';
   static const newUser = '/users/new';
+  static const myPerformance = '/profile/performance';
+  static String performanceOf(String employeeId) => '/performance/$employeeId';
+  static const performanceMetrics = '/performance/metrics';
 }
 
 /// Pure redirect rule (unit-tested):
@@ -146,7 +151,19 @@ GoRouter router(Ref ref) {
           GoRoute(path: AppDestination.roster.path, pageBuilder: (_, _) => _page(const RosterScreen())),
           GoRoute(path: AppDestination.fleet.path, pageBuilder: (_, _) => _page(const FleetScreen())),
           GoRoute(path: AppDestination.notifications.path, pageBuilder: (_, _) => _page(const NotificationsScreen())),
-          GoRoute(path: AppDestination.profile.path, pageBuilder: (_, _) => _page(const ProfileScreen())),
+          GoRoute(
+            path: AppDestination.profile.path,
+            pageBuilder: (_, _) => _page(const ProfileScreen()),
+            routes: [GoRoute(path: 'performance', builder: (_, _) => const _MyPerformance())],
+          ),
+          GoRoute(
+            path: AppDestination.performance.path,
+            pageBuilder: (_, _) => _page(const PerformancePeopleScreen()),
+            routes: [
+              GoRoute(path: 'metrics', builder: (_, _) => const PerformanceMetricsScreen()),
+              GoRoute(path: ':employeeId', builder: (_, state) => PerformanceDetailScreen(employeeId: state.pathParameters['employeeId']!)),
+            ],
+          ),
           GoRoute(path: AppDestination.more.path, pageBuilder: (_, _) => _page(const MoreScreen())),
         ],
       ),
@@ -171,5 +188,16 @@ class _ShellHost extends ConsumerWidget {
     // The redirect guarantees a signed-in session here; this guard covers the frame before it runs.
     if (session is! SignedIn) return const SizedBox.shrink();
     return AppShell(user: session.user, location: location, child: child);
+  }
+}
+
+/// My own performance (from My Profile), for every role that is rated.
+class _MyPerformance extends ConsumerWidget {
+  const _MyPerformance();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+    return user == null ? const SizedBox.shrink() : PerformanceDetailScreen(employeeId: user.employeeId);
   }
 }

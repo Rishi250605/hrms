@@ -12,7 +12,9 @@ part of 'org_repository.dart';
 @ProviderFor(orgRepository)
 final orgRepositoryProvider = OrgRepositoryProvider._();
 
-final class OrgRepositoryProvider extends $FunctionalProvider<OrgRepository, OrgRepository, OrgRepository> with $Provider<OrgRepository> {
+final class OrgRepositoryProvider
+    extends $FunctionalProvider<OrgRepository, OrgRepository, OrgRepository>
+    with $Provider<OrgRepository> {
   OrgRepositoryProvider._()
     : super(
         from: null,
@@ -29,7 +31,8 @@ final class OrgRepositoryProvider extends $FunctionalProvider<OrgRepository, Org
 
   @$internal
   @override
-  $ProviderElement<OrgRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<OrgRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   OrgRepository create(Ref ref) {
@@ -38,7 +41,10 @@ final class OrgRepositoryProvider extends $FunctionalProvider<OrgRepository, Org
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(OrgRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<OrgRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OrgRepository>(value),
+    );
   }
 }
 
@@ -51,18 +57,34 @@ final depotsProvider = DepotsProvider._();
 
 /// Depots of the selected business unit (all of mine when none is selected).
 
-final class DepotsProvider extends $FunctionalProvider<AsyncValue<List<DepotItem>>, List<DepotItem>, FutureOr<List<DepotItem>>>
+final class DepotsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DepotItem>>,
+          List<DepotItem>,
+          FutureOr<List<DepotItem>>
+        >
     with $FutureModifier<List<DepotItem>>, $FutureProvider<List<DepotItem>> {
   /// Depots of the selected business unit (all of mine when none is selected).
   DepotsProvider._()
-    : super(from: null, argument: null, retry: null, name: r'depotsProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'depotsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$depotsHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<DepotItem>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<DepotItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<DepotItem>> create(Ref ref) {

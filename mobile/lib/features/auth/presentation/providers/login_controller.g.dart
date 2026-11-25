@@ -14,7 +14,8 @@ part of 'login_controller.dart';
 final loginControllerProvider = LoginControllerProvider._();
 
 /// Employee code + password login (PHASE-2-FEATURES §3). Lockout and wrong-password errors come from the API.
-final class LoginControllerProvider extends $NotifierProvider<LoginController, LoginState> {
+final class LoginControllerProvider
+    extends $NotifierProvider<LoginController, LoginState> {
   /// Employee code + password login (PHASE-2-FEATURES §3). Lockout and wrong-password errors come from the API.
   LoginControllerProvider._()
     : super(
@@ -36,7 +37,10 @@ final class LoginControllerProvider extends $NotifierProvider<LoginController, L
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(LoginState value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<LoginState>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<LoginState>(value),
+    );
   }
 }
 
@@ -50,7 +54,14 @@ abstract class _$LoginController extends $Notifier<LoginState> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<LoginState, LoginState>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<LoginState, LoginState>, LoginState, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<LoginState, LoginState>,
+              LoginState,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }

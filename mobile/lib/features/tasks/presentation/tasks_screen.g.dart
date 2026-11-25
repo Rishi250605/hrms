@@ -12,10 +12,20 @@ part of 'tasks_screen.dart';
 @ProviderFor(tasks)
 final tasksProvider = TasksFamily._();
 
-final class TasksProvider extends $FunctionalProvider<AsyncValue<TaskPage>, TaskPage, FutureOr<TaskPage>>
+final class TasksProvider
+    extends
+        $FunctionalProvider<AsyncValue<TaskPage>, TaskPage, FutureOr<TaskPage>>
     with $FutureModifier<TaskPage>, $FutureProvider<TaskPage> {
-  TasksProvider._({required TasksFamily super.from, required TaskQuery super.argument})
-    : super(retry: null, name: r'tasksProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  TasksProvider._({
+    required TasksFamily super.from,
+    required TaskQuery super.argument,
+  }) : super(
+         retry: null,
+         name: r'tasksProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$tasksHash();
@@ -29,7 +39,8 @@ final class TasksProvider extends $FunctionalProvider<AsyncValue<TaskPage>, Task
 
   @$internal
   @override
-  $FutureProviderElement<TaskPage> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<TaskPage> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<TaskPage> create(Ref ref) {
@@ -50,8 +61,16 @@ final class TasksProvider extends $FunctionalProvider<AsyncValue<TaskPage>, Task
 
 String _$tasksHash() => r'46df9f68d1f954a7f2c270f12f1530f5554233de';
 
-final class TasksFamily extends $Family with $FunctionalFamilyOverride<FutureOr<TaskPage>, TaskQuery> {
-  TasksFamily._() : super(retry: null, name: r'tasksProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class TasksFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<TaskPage>, TaskQuery> {
+  TasksFamily._()
+    : super(
+        retry: null,
+        name: r'tasksProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   TasksProvider call(TaskQuery q) => TasksProvider._(argument: q, from: this);
 

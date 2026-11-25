@@ -18,6 +18,7 @@ import 'package:hrms_api/src/api/leave_api.dart';
 import 'package:hrms_api/src/api/notifications_api.dart';
 import 'package:hrms_api/src/api/org_api.dart';
 import 'package:hrms_api/src/api/payslips_api.dart';
+import 'package:hrms_api/src/api/performance_api.dart';
 import 'package:hrms_api/src/api/reports_api.dart';
 import 'package:hrms_api/src/api/roster_api.dart';
 import 'package:hrms_api/src/api/settings_api.dart';
@@ -208,6 +209,12 @@ class HrmsApi {
   /// by doing that all interceptors will not be executed
   PayslipsApi getPayslipsApi() {
     return PayslipsApi(dio);
+  }
+
+  /// Get PerformanceApi instance, base route and serializer can be overridden by a given but be careful,
+  /// by doing that all interceptors will not be executed
+  PerformanceApi getPerformanceApi() {
+    return PerformanceApi(dio);
   }
 
   /// Get ReportsApi instance, base route and serializer can be overridden by a given but be careful,

@@ -12,7 +12,13 @@ part of 'attendance_repository.dart';
 @ProviderFor(attendanceRepository)
 final attendanceRepositoryProvider = AttendanceRepositoryProvider._();
 
-final class AttendanceRepositoryProvider extends $FunctionalProvider<AttendanceRepository, AttendanceRepository, AttendanceRepository>
+final class AttendanceRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AttendanceRepository,
+          AttendanceRepository,
+          AttendanceRepository
+        >
     with $Provider<AttendanceRepository> {
   AttendanceRepositoryProvider._()
     : super(
@@ -30,7 +36,9 @@ final class AttendanceRepositoryProvider extends $FunctionalProvider<AttendanceR
 
   @$internal
   @override
-  $ProviderElement<AttendanceRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AttendanceRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   AttendanceRepository create(Ref ref) {
@@ -39,25 +47,40 @@ final class AttendanceRepositoryProvider extends $FunctionalProvider<AttendanceR
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AttendanceRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<AttendanceRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AttendanceRepository>(value),
+    );
   }
 }
 
-String _$attendanceRepositoryHash() => r'f382fb5e90b749dfa27883b66d31e80558cbccdc';
+String _$attendanceRepositoryHash() =>
+    r'f382fb5e90b749dfa27883b66d31e80558cbccdc';
 
 @ProviderFor(offlineDb)
 final offlineDbProvider = OfflineDbProvider._();
 
-final class OfflineDbProvider extends $FunctionalProvider<OfflineDb, OfflineDb, OfflineDb> with $Provider<OfflineDb> {
+final class OfflineDbProvider
+    extends $FunctionalProvider<OfflineDb, OfflineDb, OfflineDb>
+    with $Provider<OfflineDb> {
   OfflineDbProvider._()
-    : super(from: null, argument: null, retry: null, name: r'offlineDbProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'offlineDbProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$offlineDbHash();
 
   @$internal
   @override
-  $ProviderElement<OfflineDb> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<OfflineDb> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   OfflineDb create(Ref ref) {
@@ -66,7 +89,10 @@ final class OfflineDbProvider extends $FunctionalProvider<OfflineDb, OfflineDb, 
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(OfflineDb value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<OfflineDb>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<OfflineDb>(value),
+    );
   }
 }
 
@@ -75,7 +101,10 @@ String _$offlineDbHash() => r'01504a27764e3a4c36333bc8d070da3f80968fe7';
 @ProviderFor(attendanceQueue)
 final attendanceQueueProvider = AttendanceQueueProvider._();
 
-final class AttendanceQueueProvider extends $FunctionalProvider<AttendanceQueue, AttendanceQueue, AttendanceQueue> with $Provider<AttendanceQueue> {
+final class AttendanceQueueProvider
+    extends
+        $FunctionalProvider<AttendanceQueue, AttendanceQueue, AttendanceQueue>
+    with $Provider<AttendanceQueue> {
   AttendanceQueueProvider._()
     : super(
         from: null,
@@ -92,7 +121,8 @@ final class AttendanceQueueProvider extends $FunctionalProvider<AttendanceQueue,
 
   @$internal
   @override
-  $ProviderElement<AttendanceQueue> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AttendanceQueue> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   AttendanceQueue create(Ref ref) {
@@ -101,7 +131,10 @@ final class AttendanceQueueProvider extends $FunctionalProvider<AttendanceQueue,
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AttendanceQueue value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<AttendanceQueue>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AttendanceQueue>(value),
+    );
   }
 }
 

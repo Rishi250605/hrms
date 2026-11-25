@@ -24,7 +24,8 @@ final sessionControllerProvider = SessionControllerProvider._();
 /// - error    → splash with retry (server unreachable while restoring a session)
 /// - signedOut → login
 /// - signedIn  → role shell
-final class SessionControllerProvider extends $AsyncNotifierProvider<SessionController, SessionState> {
+final class SessionControllerProvider
+    extends $AsyncNotifierProvider<SessionController, SessionState> {
   /// Source of truth for "who is signed in". The router redirects on this provider.
   ///
   /// - loading  → splash
@@ -65,7 +66,14 @@ abstract class _$SessionController extends $AsyncNotifier<SessionState> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<AsyncValue<SessionState>, SessionState>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<SessionState>, SessionState>, AsyncValue<SessionState>, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<SessionState>, SessionState>,
+              AsyncValue<SessionState>,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }

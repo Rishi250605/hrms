@@ -3,7 +3,7 @@
     <!-- Allowance voice notes (record plugin, PHASE-2-FEATURES §6.2). -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
-        android:label="Transport HRMS"
+        android:label="FleetHR"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -3274,6 +3274,246 @@ components:
               - uploadedAt
       required:
         - items
+    PerformanceMetricItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        unit:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+        isActive:
+          type: boolean
+      required:
+        - id
+        - code
+        - name
+        - unit
+        - sortOrder
+        - isActive
+    PerformanceMetricList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PerformanceMetricItem"
+      required:
+        - items
+    PerformanceMetricCreateBody:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z0-9_]{2,30}$
+        name:
+          type: string
+          minLength: 2
+          maxLength: 60
+        unit:
+          type: string
+          minLength: 1
+          maxLength: 20
+        sortOrder:
+          type: integer
+          minimum: 0
+          maximum: 1000
+      required:
+        - code
+        - name
+    PerformanceMetricUpdateBody:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 60
+        unit:
+          type: string
+          nullable: true
+          minLength: 1
+          maxLength: 20
+        sortOrder:
+          type: integer
+          minimum: 0
+          maximum: 1000
+        isActive:
+          type: boolean
+    PerformanceRatingItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+          nullable: true
+        ratedBy:
+          $ref: "#/components/schemas/PersonRef"
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - rating
+        - comment
+        - ratedBy
+        - createdAt
+    PerformanceWeekValue:
+      type: object
+      properties:
+        metricId:
+          type: string
+          format: uuid
+        code:
+          type: string
+        name:
+          type: string
+        unit:
+          type: string
+          nullable: true
+        value:
+          type: number
+          nullable: true
+      required:
+        - metricId
+        - code
+        - name
+        - unit
+        - value
+    PerformanceWeek:
+      type: object
+      properties:
+        weekStart:
+          type: string
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: 2026-11-09
+          description: Monday of the week (IST)
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/PerformanceWeekValue"
+          description: One entry per active metric, in display order; value null = not entered
+      required:
+        - weekStart
+        - values
+    PerformanceSummary:
+      type: object
+      properties:
+        person:
+          $ref: "#/components/schemas/PersonRef"
+        businessUnit:
+          $ref: "#/components/schemas/BusinessUnitRef"
+        latestRating:
+          allOf:
+            - $ref: "#/components/schemas/PerformanceRatingItem"
+            - nullable: true
+        ratings:
+          type: array
+          items:
+            $ref: "#/components/schemas/PerformanceRatingItem"
+          description: Rating history, newest first (last 50)
+        weeks:
+          type: array
+          items:
+            $ref: "#/components/schemas/PerformanceWeek"
+          description: Weeks with at least one value, newest first
+        canRate:
+          type: boolean
+        canEnterMetrics:
+          type: boolean
+      required:
+        - person
+        - businessUnit
+        - latestRating
+        - ratings
+        - weeks
+        - canRate
+        - canEnterMetrics
+    PerformancePersonItem:
+      type: object
+      properties:
+        person:
+          $ref: "#/components/schemas/PersonRef"
+        businessUnit:
+          $ref: "#/components/schemas/BusinessUnitRef"
+        latestRating:
+          allOf:
+            - $ref: "#/components/schemas/PerformanceRatingItem"
+            - nullable: true
+        lastWeekStart:
+          type: string
+          nullable: true
+          pattern: ^\d{4}-\d{2}-\d{2}$
+          example: 2026-11-09
+          description: Latest week with values entered
+        canRate:
+          type: boolean
+        canEnterMetrics:
+          type: boolean
+      required:
+        - person
+        - businessUnit
+        - latestRating
+        - lastWeekStart
+        - canRate
+        - canEnterMetrics
+    PerformancePersonList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PerformancePersonItem"
+      required:
+        - items
+    PerformanceRatingCreateBody:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+          maxLength: 1000
+      required:
+        - rating
+    PerformanceWeekBody:
+      type: object
+      properties:
+        values:
+          type: array
+          items:
+            type: object
+            properties:
+              metricId:
+                type: string
+                format: uuid
+              value:
+                type: number
+                nullable: true
+                minimum: 0
+                maximum: 1000000000000
+                description: null removes the value
+            required:
+              - metricId
+              - value
+          minItems: 1
+          maxItems: 50
+      required:
+        - values
     ReportGroup:
       type: string
       enum:
@@ -8205,6 +8445,336 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "404":
           description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /performance-metrics:
+    get:
+      operationId: listPerformanceMetrics
+      summary: Weekly performance metrics (Mileage, Employee count, Maintenance, …)
+      description: Any authenticated manager.
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Metrics in display order
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceMetricList"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createPerformanceMetric
+      summary: Add a weekly metric
+      description: "Roles: DIRECTOR."
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PerformanceMetricCreateBody"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceMetricItem"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Role not permitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: Code exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /performance-metrics/{id}:
+    patch:
+      operationId: updatePerformanceMetric
+      summary: Rename, reorder or deactivate a weekly metric
+      description: "Roles: DIRECTOR."
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: id
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PerformanceMetricUpdateBody"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceMetricItem"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Role not permitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /performance/people:
+    get:
+      operationId: listPerformancePeople
+      summary: RMs, OMs and HRs in my business units with their latest rating (HR / director)
+      description: "Roles: HR, DIRECTOR."
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: false
+          name: businessUnitId
+          in: query
+      responses:
+        "200":
+          description: People by name
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformancePersonList"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Role not permitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /performance/employees/{employeeId}:
+    get:
+      operationId: getPerformance
+      summary: A person's rating history and weekly values (self, HR in the BU, director)
+      description: Any authenticated manager.
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: employeeId
+          in: path
+        - schema:
+            type: integer
+            description: How many recent weeks to return
+          required: false
+          description: How many recent weeks to return
+          name: weeks
+          in: query
+      responses:
+        "200":
+          description: Summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceSummary"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found or not visible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /performance/employees/{employeeId}/ratings:
+    post:
+      operationId: ratePerformance
+      summary: "Rate a person 1–5 (HR: RMs and OMs in their BUs; director: anyone rated)"
+      description: "Roles: HR, DIRECTOR."
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: employeeId
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PerformanceRatingCreateBody"
+      responses:
+        "201":
+          description: Rating
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceRatingItem"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Not allowed to rate this person
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found or not visible
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /performance/employees/{employeeId}/weeks/{weekStart}:
+    put:
+      operationId: putPerformanceWeek
+      summary: Enter or change a person's weekly metric values (director); null removes a value
+      description: "Roles: DIRECTOR."
+      tags:
+        - Performance
+      security:
+        - bearerAuth: []
+      parameters:
+        - schema:
+            type: string
+            format: uuid
+          required: true
+          name: employeeId
+          in: path
+        - schema:
+            type: string
+            pattern: ^\d{4}-\d{2}-\d{2}$
+            example: 2026-11-09
+            description: Calendar date (IST business date)
+          required: true
+          description: Calendar date (IST business date)
+          name: weekStart
+          in: path
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PerformanceWeekBody"
+      responses:
+        "200":
+          description: Updated summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerformanceSummary"
+        "400":
+          description: Not a Monday, or a future week
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "401":
+          description: Missing or invalid access token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Role not permitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Unknown or inactive metric
           content:
             application/json:
               schema:

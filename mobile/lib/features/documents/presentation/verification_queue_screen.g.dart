@@ -16,8 +16,15 @@ final verificationQueueProvider = VerificationQueueProvider._();
 /// Pending documents, oldest first (HR works the queue FIFO).
 
 final class VerificationQueueProvider
-    extends $FunctionalProvider<AsyncValue<List<DocumentWithEmployee>>, List<DocumentWithEmployee>, FutureOr<List<DocumentWithEmployee>>>
-    with $FutureModifier<List<DocumentWithEmployee>>, $FutureProvider<List<DocumentWithEmployee>> {
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DocumentWithEmployee>>,
+          List<DocumentWithEmployee>,
+          FutureOr<List<DocumentWithEmployee>>
+        >
+    with
+        $FutureModifier<List<DocumentWithEmployee>>,
+        $FutureProvider<List<DocumentWithEmployee>> {
   /// Pending documents, oldest first (HR works the queue FIFO).
   VerificationQueueProvider._()
     : super(
@@ -35,7 +42,9 @@ final class VerificationQueueProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<DocumentWithEmployee>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<DocumentWithEmployee>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<DocumentWithEmployee>> create(Ref ref) {

@@ -9,18 +9,32 @@ import '../domain/session_state.dart';
 import 'providers/login_controller.dart';
 import 'providers/session_controller.dart';
 
-/// Company logo (PHASE-2-FEATURES §3): replace assets/branding/logo.png; falls back to an icon.
+/// FleetHR logo (PHASE-2-FEATURES §3, assets/branding/logo.png; it contains the wordmark). Shown on a
+/// white rounded card so it stays legible in dark mode; falls back to an icon.
 class CompanyLogo extends StatelessWidget {
   const CompanyLogo({super.key, this.size = 72});
 
   final double size;
 
   @override
-  Widget build(BuildContext context) => Image.asset(
-    'assets/branding/logo.png',
-    key: const Key('login.logo'),
-    height: size,
-    errorBuilder: (_, _, _) => Icon(Icons.local_shipping_rounded, size: size, color: Theme.of(context).colorScheme.primary),
+  Widget build(BuildContext context) => Center(
+    child: DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(size * 0.18),
+        boxShadow: const [BoxShadow(color: Color(0x22000000), blurRadius: 16, offset: Offset(0, 6))],
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(size * 0.08),
+        child: Image.asset(
+          'assets/branding/logo.png',
+          key: const Key('login.logo'),
+          height: size,
+          semanticLabel: AppLocalizations.of(context).appTitle,
+          errorBuilder: (_, _, _) => Icon(Icons.local_shipping_rounded, size: size, color: Theme.of(context).colorScheme.primary),
+        ),
+      ),
+    ),
   );
 }
 
@@ -88,14 +102,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const CompanyLogo(size: 84),
+                    const CompanyLogo(size: 150),
                     const SizedBox(height: 16),
-                    Text(l10n.appTitle, textAlign: TextAlign.center, style: theme.textTheme.headlineSmall),
-                    const SizedBox(height: 4),
                     Text(
                       l10n.loginSubtitle,
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+                      style: theme.textTheme.titleMedium?.copyWith(fontStyle: FontStyle.italic, color: scheme.onSurfaceVariant),
                     ),
                     const SizedBox(height: 28),
                     Card(

@@ -12,7 +12,8 @@ part of 'employees_providers.dart';
 @ProviderFor(EmployeeFilterController)
 final employeeFilterControllerProvider = EmployeeFilterControllerProvider._();
 
-final class EmployeeFilterControllerProvider extends $NotifierProvider<EmployeeFilterController, EmployeeFilter> {
+final class EmployeeFilterControllerProvider
+    extends $NotifierProvider<EmployeeFilterController, EmployeeFilter> {
   EmployeeFilterControllerProvider._()
     : super(
         from: null,
@@ -33,11 +34,15 @@ final class EmployeeFilterControllerProvider extends $NotifierProvider<EmployeeF
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(EmployeeFilter value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<EmployeeFilter>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<EmployeeFilter>(value),
+    );
   }
 }
 
-String _$employeeFilterControllerHash() => r'5828a61116776a0af94f32fafb2e83681e23a5b4';
+String _$employeeFilterControllerHash() =>
+    r'5828a61116776a0af94f32fafb2e83681e23a5b4';
 
 abstract class _$EmployeeFilterController extends $Notifier<EmployeeFilter> {
   EmployeeFilter build();
@@ -45,7 +50,14 @@ abstract class _$EmployeeFilterController extends $Notifier<EmployeeFilter> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<EmployeeFilter, EmployeeFilter>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<EmployeeFilter, EmployeeFilter>, EmployeeFilter, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<EmployeeFilter, EmployeeFilter>,
+              EmployeeFilter,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }
@@ -56,10 +68,19 @@ abstract class _$EmployeeFilterController extends $Notifier<EmployeeFilter> {
 final employeeListProvider = EmployeeListProvider._();
 
 /// Cursor-paged employee list for the current filter.
-final class EmployeeListProvider extends $AsyncNotifierProvider<EmployeeList, EmployeeListState> {
+final class EmployeeListProvider
+    extends $AsyncNotifierProvider<EmployeeList, EmployeeListState> {
   /// Cursor-paged employee list for the current filter.
   EmployeeListProvider._()
-    : super(from: null, argument: null, retry: null, name: r'employeeListProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'employeeListProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$employeeListHash();
@@ -78,9 +99,16 @@ abstract class _$EmployeeList extends $AsyncNotifier<EmployeeListState> {
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<AsyncValue<EmployeeListState>, EmployeeListState>;
+    final ref =
+        this.ref as $Ref<AsyncValue<EmployeeListState>, EmployeeListState>;
     final element =
-        ref.element as $ClassProviderElement<AnyNotifier<AsyncValue<EmployeeListState>, EmployeeListState>, AsyncValue<EmployeeListState>, Object?, Object?>;
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<EmployeeListState>, EmployeeListState>,
+              AsyncValue<EmployeeListState>,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }
@@ -88,10 +116,24 @@ abstract class _$EmployeeList extends $AsyncNotifier<EmployeeListState> {
 @ProviderFor(employeeDetail)
 final employeeDetailProvider = EmployeeDetailFamily._();
 
-final class EmployeeDetailProvider extends $FunctionalProvider<AsyncValue<EmployeeDetail>, EmployeeDetail, FutureOr<EmployeeDetail>>
+final class EmployeeDetailProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<EmployeeDetail>,
+          EmployeeDetail,
+          FutureOr<EmployeeDetail>
+        >
     with $FutureModifier<EmployeeDetail>, $FutureProvider<EmployeeDetail> {
-  EmployeeDetailProvider._({required EmployeeDetailFamily super.from, required String super.argument})
-    : super(retry: null, name: r'employeeDetailProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  EmployeeDetailProvider._({
+    required EmployeeDetailFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'employeeDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$employeeDetailHash();
@@ -105,7 +147,9 @@ final class EmployeeDetailProvider extends $FunctionalProvider<AsyncValue<Employ
 
   @$internal
   @override
-  $FutureProviderElement<EmployeeDetail> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<EmployeeDetail> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<EmployeeDetail> create(Ref ref) {
@@ -126,10 +170,19 @@ final class EmployeeDetailProvider extends $FunctionalProvider<AsyncValue<Employ
 
 String _$employeeDetailHash() => r'6a09f6e2c66f885a426e2c6ffcad92b5f62e257d';
 
-final class EmployeeDetailFamily extends $Family with $FunctionalFamilyOverride<FutureOr<EmployeeDetail>, String> {
-  EmployeeDetailFamily._() : super(retry: null, name: r'employeeDetailProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class EmployeeDetailFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<EmployeeDetail>, String> {
+  EmployeeDetailFamily._()
+    : super(
+        retry: null,
+        name: r'employeeDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  EmployeeDetailProvider call(String id) => EmployeeDetailProvider._(argument: id, from: this);
+  EmployeeDetailProvider call(String id) =>
+      EmployeeDetailProvider._(argument: id, from: this);
 
   @override
   String toString() => r'employeeDetailProvider';
@@ -138,10 +191,26 @@ final class EmployeeDetailFamily extends $Family with $FunctionalFamilyOverride<
 @ProviderFor(employeeDocuments)
 final employeeDocumentsProvider = EmployeeDocumentsFamily._();
 
-final class EmployeeDocumentsProvider extends $FunctionalProvider<AsyncValue<List<DocumentItem>>, List<DocumentItem>, FutureOr<List<DocumentItem>>>
-    with $FutureModifier<List<DocumentItem>>, $FutureProvider<List<DocumentItem>> {
-  EmployeeDocumentsProvider._({required EmployeeDocumentsFamily super.from, required String super.argument})
-    : super(retry: null, name: r'employeeDocumentsProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+final class EmployeeDocumentsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DocumentItem>>,
+          List<DocumentItem>,
+          FutureOr<List<DocumentItem>>
+        >
+    with
+        $FutureModifier<List<DocumentItem>>,
+        $FutureProvider<List<DocumentItem>> {
+  EmployeeDocumentsProvider._({
+    required EmployeeDocumentsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'employeeDocumentsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$employeeDocumentsHash();
@@ -155,7 +224,9 @@ final class EmployeeDocumentsProvider extends $FunctionalProvider<AsyncValue<Lis
 
   @$internal
   @override
-  $FutureProviderElement<List<DocumentItem>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<DocumentItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<DocumentItem>> create(Ref ref) {
@@ -176,11 +247,19 @@ final class EmployeeDocumentsProvider extends $FunctionalProvider<AsyncValue<Lis
 
 String _$employeeDocumentsHash() => r'73cf797ed72f00f9e6aa1492cbfa85af02a6632c';
 
-final class EmployeeDocumentsFamily extends $Family with $FunctionalFamilyOverride<FutureOr<List<DocumentItem>>, String> {
+final class EmployeeDocumentsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<DocumentItem>>, String> {
   EmployeeDocumentsFamily._()
-    : super(retry: null, name: r'employeeDocumentsProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+    : super(
+        retry: null,
+        name: r'employeeDocumentsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  EmployeeDocumentsProvider call(String id) => EmployeeDocumentsProvider._(argument: id, from: this);
+  EmployeeDocumentsProvider call(String id) =>
+      EmployeeDocumentsProvider._(argument: id, from: this);
 
   @override
   String toString() => r'employeeDocumentsProvider';
@@ -189,7 +268,13 @@ final class EmployeeDocumentsFamily extends $Family with $FunctionalFamilyOverri
 @ProviderFor(onboardingDepots)
 final onboardingDepotsProvider = OnboardingDepotsProvider._();
 
-final class OnboardingDepotsProvider extends $FunctionalProvider<AsyncValue<List<DepotItem>>, List<DepotItem>, FutureOr<List<DepotItem>>>
+final class OnboardingDepotsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DepotItem>>,
+          List<DepotItem>,
+          FutureOr<List<DepotItem>>
+        >
     with $FutureModifier<List<DepotItem>>, $FutureProvider<List<DepotItem>> {
   OnboardingDepotsProvider._()
     : super(
@@ -207,7 +292,9 @@ final class OnboardingDepotsProvider extends $FunctionalProvider<AsyncValue<List
 
   @$internal
   @override
-  $FutureProviderElement<List<DepotItem>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<DepotItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<DepotItem>> create(Ref ref) {
@@ -224,11 +311,25 @@ final businessUnitRmsProvider = BusinessUnitRmsFamily._();
 
 /// Regional managers of a business unit (who a new driver / loadman can report to).
 
-final class BusinessUnitRmsProvider extends $FunctionalProvider<AsyncValue<List<UserItem>>, List<UserItem>, FutureOr<List<UserItem>>>
+final class BusinessUnitRmsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<UserItem>>,
+          List<UserItem>,
+          FutureOr<List<UserItem>>
+        >
     with $FutureModifier<List<UserItem>>, $FutureProvider<List<UserItem>> {
   /// Regional managers of a business unit (who a new driver / loadman can report to).
-  BusinessUnitRmsProvider._({required BusinessUnitRmsFamily super.from, required String super.argument})
-    : super(retry: null, name: r'businessUnitRmsProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  BusinessUnitRmsProvider._({
+    required BusinessUnitRmsFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'businessUnitRmsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$businessUnitRmsHash();
@@ -242,7 +343,9 @@ final class BusinessUnitRmsProvider extends $FunctionalProvider<AsyncValue<List<
 
   @$internal
   @override
-  $FutureProviderElement<List<UserItem>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<UserItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<UserItem>> create(Ref ref) {
@@ -265,12 +368,21 @@ String _$businessUnitRmsHash() => r'be3e8f3f8cbd1cc62653fea289993a6adbe817c4';
 
 /// Regional managers of a business unit (who a new driver / loadman can report to).
 
-final class BusinessUnitRmsFamily extends $Family with $FunctionalFamilyOverride<FutureOr<List<UserItem>>, String> {
-  BusinessUnitRmsFamily._() : super(retry: null, name: r'businessUnitRmsProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class BusinessUnitRmsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<UserItem>>, String> {
+  BusinessUnitRmsFamily._()
+    : super(
+        retry: null,
+        name: r'businessUnitRmsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
   /// Regional managers of a business unit (who a new driver / loadman can report to).
 
-  BusinessUnitRmsProvider call(String businessUnitId) => BusinessUnitRmsProvider._(argument: businessUnitId, from: this);
+  BusinessUnitRmsProvider call(String businessUnitId) =>
+      BusinessUnitRmsProvider._(argument: businessUnitId, from: this);
 
   @override
   String toString() => r'businessUnitRmsProvider';
@@ -279,16 +391,27 @@ final class BusinessUnitRmsFamily extends $Family with $FunctionalFamilyOverride
 @ProviderFor(filePicker)
 final filePickerProvider = FilePickerProvider._();
 
-final class FilePickerProvider extends $FunctionalProvider<FilePickerFn, FilePickerFn, FilePickerFn> with $Provider<FilePickerFn> {
+final class FilePickerProvider
+    extends $FunctionalProvider<FilePickerFn, FilePickerFn, FilePickerFn>
+    with $Provider<FilePickerFn> {
   FilePickerProvider._()
-    : super(from: null, argument: null, retry: null, name: r'filePickerProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'filePickerProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$filePickerHash();
 
   @$internal
   @override
-  $ProviderElement<FilePickerFn> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<FilePickerFn> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   FilePickerFn create(Ref ref) {
@@ -297,7 +420,10 @@ final class FilePickerProvider extends $FunctionalProvider<FilePickerFn, FilePic
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(FilePickerFn value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<FilePickerFn>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<FilePickerFn>(value),
+    );
   }
 }
 

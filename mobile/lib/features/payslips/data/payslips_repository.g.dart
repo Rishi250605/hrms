@@ -12,7 +12,13 @@ part of 'payslips_repository.dart';
 @ProviderFor(payslipsRepository)
 final payslipsRepositoryProvider = PayslipsRepositoryProvider._();
 
-final class PayslipsRepositoryProvider extends $FunctionalProvider<PayslipsRepository, PayslipsRepository, PayslipsRepository>
+final class PayslipsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          PayslipsRepository,
+          PayslipsRepository,
+          PayslipsRepository
+        >
     with $Provider<PayslipsRepository> {
   PayslipsRepositoryProvider._()
     : super(
@@ -30,7 +36,9 @@ final class PayslipsRepositoryProvider extends $FunctionalProvider<PayslipsRepos
 
   @$internal
   @override
-  $ProviderElement<PayslipsRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<PayslipsRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   PayslipsRepository create(Ref ref) {
@@ -39,8 +47,12 @@ final class PayslipsRepositoryProvider extends $FunctionalProvider<PayslipsRepos
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(PayslipsRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<PayslipsRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PayslipsRepository>(value),
+    );
   }
 }
 
-String _$payslipsRepositoryHash() => r'15bfc3e7b7ef1d03b046d0eb71819093d13caa3a';
+String _$payslipsRepositoryHash() =>
+    r'15bfc3e7b7ef1d03b046d0eb71819093d13caa3a';

@@ -12,7 +12,13 @@ part of 'requests_repository.dart';
 @ProviderFor(requestsRepository)
 final requestsRepositoryProvider = RequestsRepositoryProvider._();
 
-final class RequestsRepositoryProvider extends $FunctionalProvider<RequestsRepository, RequestsRepository, RequestsRepository>
+final class RequestsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          RequestsRepository,
+          RequestsRepository,
+          RequestsRepository
+        >
     with $Provider<RequestsRepository> {
   RequestsRepositoryProvider._()
     : super(
@@ -30,7 +36,9 @@ final class RequestsRepositoryProvider extends $FunctionalProvider<RequestsRepos
 
   @$internal
   @override
-  $ProviderElement<RequestsRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<RequestsRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   RequestsRepository create(Ref ref) {
@@ -39,8 +47,12 @@ final class RequestsRepositoryProvider extends $FunctionalProvider<RequestsRepos
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(RequestsRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<RequestsRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RequestsRepository>(value),
+    );
   }
 }
 
-String _$requestsRepositoryHash() => r'0cb922e56a2ec347fe80b523977f99ce7749ec08';
+String _$requestsRepositoryHash() =>
+    r'0cb922e56a2ec347fe80b523977f99ce7749ec08';

@@ -178,10 +178,25 @@ async function ensureAllowanceTypes() {
   });
 }
 
+/** Weekly performance metrics (the director edits them in the app). TODO(business): confirm units and whether Maintenance is a cost or a score. */
+async function ensurePerformanceMetrics() {
+  if ((await prisma.performanceMetric.count()) > 0) return;
+  const metrics = [
+    { code: 'MILEAGE', name: 'Mileage', unit: 'km/l', sortOrder: 10 },
+    { code: 'EMPLOYEE_COUNT', name: 'Employee count', unit: 'count', sortOrder: 20 },
+    { code: 'MAINTENANCE', name: 'Maintenance', unit: null, sortOrder: 30 },
+  ];
+  await prisma.$transaction(async (tx) => {
+    await tx.performanceMetric.createMany({ data: metrics });
+    await audit.record(tx, ctx, { action: 'performanceMetric.seed', entityType: 'PerformanceMetric', entityId: 'seed', after: metrics });
+  });
+}
+
 async function main() {
   const bu = await ensureBusinessUnits();
   await ensureDocumentRequirements();
   await ensureAllowanceTypes();
+  await ensurePerformanceMetrics();
 
   const directorPassword = process.env.SEED_DIRECTOR_PASSWORD;
   if (!directorPassword || directorPassword.length < 8) throw new Error('SEED_DIRECTOR_PASSWORD (8+ characters) is required to seed the director');

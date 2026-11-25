@@ -12,7 +12,14 @@ part of 'roster_repository.dart';
 @ProviderFor(rosterRepository)
 final rosterRepositoryProvider = RosterRepositoryProvider._();
 
-final class RosterRepositoryProvider extends $FunctionalProvider<RosterRepository, RosterRepository, RosterRepository> with $Provider<RosterRepository> {
+final class RosterRepositoryProvider
+    extends
+        $FunctionalProvider<
+          RosterRepository,
+          RosterRepository,
+          RosterRepository
+        >
+    with $Provider<RosterRepository> {
   RosterRepositoryProvider._()
     : super(
         from: null,
@@ -29,7 +36,8 @@ final class RosterRepositoryProvider extends $FunctionalProvider<RosterRepositor
 
   @$internal
   @override
-  $ProviderElement<RosterRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<RosterRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   RosterRepository create(Ref ref) {
@@ -38,7 +46,10 @@ final class RosterRepositoryProvider extends $FunctionalProvider<RosterRepositor
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(RosterRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<RosterRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RosterRepository>(value),
+    );
   }
 }
 

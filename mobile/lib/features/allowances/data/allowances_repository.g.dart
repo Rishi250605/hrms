@@ -12,7 +12,13 @@ part of 'allowances_repository.dart';
 @ProviderFor(allowancesRepository)
 final allowancesRepositoryProvider = AllowancesRepositoryProvider._();
 
-final class AllowancesRepositoryProvider extends $FunctionalProvider<AllowancesRepository, AllowancesRepository, AllowancesRepository>
+final class AllowancesRepositoryProvider
+    extends
+        $FunctionalProvider<
+          AllowancesRepository,
+          AllowancesRepository,
+          AllowancesRepository
+        >
     with $Provider<AllowancesRepository> {
   AllowancesRepositoryProvider._()
     : super(
@@ -30,7 +36,9 @@ final class AllowancesRepositoryProvider extends $FunctionalProvider<AllowancesR
 
   @$internal
   @override
-  $ProviderElement<AllowancesRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AllowancesRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   AllowancesRepository create(Ref ref) {
@@ -39,8 +47,12 @@ final class AllowancesRepositoryProvider extends $FunctionalProvider<AllowancesR
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AllowancesRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<AllowancesRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AllowancesRepository>(value),
+    );
   }
 }
 
-String _$allowancesRepositoryHash() => r'a96a44f672ea55ad6e54d32726d2d21ed46fea67';
+String _$allowancesRepositoryHash() =>
+    r'a96a44f672ea55ad6e54d32726d2d21ed46fea67';

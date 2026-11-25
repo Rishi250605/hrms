@@ -293,7 +293,7 @@ model Employee {
   user          User?
   businessUnits EmployeeBusinessUnit[]
   jobs          EmployeeJob[]
-  reportees     EmployeeJob[]          @relation("JobReportingTo")
+  reportees     EmployeeJob[]            @relation("JobReportingTo")
   documents     Document[]
   assignments   DutyAssignment[]
   attendance    AttendanceMark[]
@@ -301,8 +301,11 @@ model Employee {
   leaveRequests LeaveRequest[]
   allowances    AllowanceRequest[]
   payslips      Payslip[]
-  tasksAllotted Task[]                 @relation("TaskAllottedBy")
-  tasksAssigned Task[]                 @relation("TaskAssignee")
+  tasksAllotted Task[]                   @relation("TaskAllottedBy")
+  tasksAssigned Task[]                   @relation("TaskAssignee")
+  ratings       PerformanceRating[]      @relation("PerformanceRatingSubject")
+  ratingsGiven  PerformanceRating[]      @relation("PerformanceRatingRater")
+  metricValues  PerformanceMetricValue[]
 
   @@index([fullName])
   @@index([status])
@@ -930,4 +933,63 @@ model Task {
   @@index([businessUnitId, date])
   @@index([groupId])
   @@map("tasks")
+}
+
+// ───────────────────────────── Performance ─────────────────────────────
+
+/// Weekly KPIs the director fills per person (seeded: Mileage, Employee count, Maintenance); configurable.
+model PerformanceMetric {
+  id          String   @id @default(uuid(7)) @db.Uuid
+  code        String   @unique
+  name        String
+  /// Display unit, e.g. "km/l", "count", "₹". TODO(business): confirm units.
+  unit        String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+  createdById String?  @map("created_by_id") @db.Uuid
+
+  values PerformanceMetricValue[]
+
+  @@map("performance_metrics")
+}
+
+/// A 1–5 rating of a login user (RM / OM / HR) by HR or the director. Never updated: every rating is history.
+model PerformanceRating {
+  id                String   @id @default(uuid(7)) @db.Uuid
+  employeeId        String   @map("employee_id") @db.Uuid
+  businessUnitId    String   @map("business_unit_id") @db.Uuid
+  rating            Int
+  comment           String?
+  ratedByEmployeeId String   @map("rated_by_employee_id") @db.Uuid
+  ratedById         String   @map("rated_by_id") @db.Uuid
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  employee Employee @relation("PerformanceRatingSubject", fields: [employeeId], references: [id], onDelete: Restrict)
+  ratedBy  Employee @relation("PerformanceRatingRater", fields: [ratedByEmployeeId], references: [id], onDelete: Restrict)
+
+  @@index([employeeId, createdAt])
+  @@index([businessUnitId])
+  @@map("performance_ratings")
+}
+
+/// One value per person, metric and week (weekStart = the Monday, IST).
+model PerformanceMetricValue {
+  id             String   @id @default(uuid(7)) @db.Uuid
+  employeeId     String   @map("employee_id") @db.Uuid
+  businessUnitId String   @map("business_unit_id") @db.Uuid
+  metricId       String   @map("metric_id") @db.Uuid
+  weekStart      DateTime @map("week_start") @db.Date
+  value          Decimal  @db.Decimal(14, 2)
+  enteredById    String   @map("entered_by_id") @db.Uuid
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  employee Employee          @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+  metric   PerformanceMetric @relation(fields: [metricId], references: [id], onDelete: Restrict)
+
+  @@unique([employeeId, metricId, weekStart])
+  @@index([businessUnitId, weekStart])
+  @@map("performance_metric_values")
 }

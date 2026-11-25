@@ -21,6 +21,7 @@ String? notificationTarget(String? entityType, String? entityId) => switch (enti
   'DOCUMENT' => AppDestination.documents.path,
   'EMPLOYEE' => entityId == null ? null : Routes.employee(entityId),
   'USER' => AppDestination.profile.path,
+  'PERFORMANCE' => Routes.myPerformance,
   _ => null,
 };
 

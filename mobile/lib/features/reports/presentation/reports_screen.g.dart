@@ -12,10 +12,24 @@ part of 'reports_screen.dart';
 @ProviderFor(attendanceReport)
 final attendanceReportProvider = AttendanceReportFamily._();
 
-final class AttendanceReportProvider extends $FunctionalProvider<AsyncValue<AttendanceReport>, AttendanceReport, FutureOr<AttendanceReport>>
+final class AttendanceReportProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<AttendanceReport>,
+          AttendanceReport,
+          FutureOr<AttendanceReport>
+        >
     with $FutureModifier<AttendanceReport>, $FutureProvider<AttendanceReport> {
-  AttendanceReportProvider._({required AttendanceReportFamily super.from, required ReportFilter super.argument})
-    : super(retry: null, name: r'attendanceReportProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  AttendanceReportProvider._({
+    required AttendanceReportFamily super.from,
+    required ReportFilter super.argument,
+  }) : super(
+         retry: null,
+         name: r'attendanceReportProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$attendanceReportHash();
@@ -29,7 +43,9 @@ final class AttendanceReportProvider extends $FunctionalProvider<AsyncValue<Atte
 
   @$internal
   @override
-  $FutureProviderElement<AttendanceReport> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<AttendanceReport> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<AttendanceReport> create(Ref ref) {
@@ -50,10 +66,19 @@ final class AttendanceReportProvider extends $FunctionalProvider<AsyncValue<Atte
 
 String _$attendanceReportHash() => r'1134ae285b9a8ac1310eed0ba7cbfd54488ef578';
 
-final class AttendanceReportFamily extends $Family with $FunctionalFamilyOverride<FutureOr<AttendanceReport>, ReportFilter> {
-  AttendanceReportFamily._() : super(retry: null, name: r'attendanceReportProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class AttendanceReportFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<AttendanceReport>, ReportFilter> {
+  AttendanceReportFamily._()
+    : super(
+        retry: null,
+        name: r'attendanceReportProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  AttendanceReportProvider call(ReportFilter filter) => AttendanceReportProvider._(argument: filter, from: this);
+  AttendanceReportProvider call(ReportFilter filter) =>
+      AttendanceReportProvider._(argument: filter, from: this);
 
   @override
   String toString() => r'attendanceReportProvider';

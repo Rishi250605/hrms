@@ -1,13 +1,13 @@
 {
   "@@locale": "en",
-  "appTitle": "Transport HRMS",
+  "appTitle": "FleetHR",
   "retry": "Retry",
   "cancel": "Cancel",
   "logout": "Sign out",
   "loadingSession": "Signing you in…",
   "sessionLoadFailed": "Could not reach the server. Check your connection and try again.",
   "loginTitle": "Sign in",
-  "loginSubtitle": "Manager app for attendance, leave, allowances, payslips and tasks",
+  "loginSubtitle": "Drive Your People. Move Your Business.",
   "phoneLabel": "Mobile number",
   "phoneHint": "98765 43210",
   "phoneInvalid": "Enter a valid 10-digit mobile number",
@@ -1013,5 +1013,59 @@
         "type": "int"
       }
     }
-  }
+  },
+  "navPerformance": "Performance",
+  "performanceNotRated": "Not rated yet",
+  "performanceRate": "Rate",
+  "performanceRateTitle": "Rate {name}",
+  "@performanceRateTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "performanceCommentOptional": "Comment (optional)",
+  "performanceRated": "Rating saved",
+  "performanceWeekly": "Weekly values",
+  "performanceNoWeeks": "No weekly values yet",
+  "performanceWeekOf": "Week of {date}",
+  "@performanceWeekOf": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "performanceEnterWeek": "Enter weekly values",
+  "performanceWeekSaved": "Weekly values saved",
+  "performanceHistory": "Rating history",
+  "performanceRatedBy": "{name} · {when}",
+  "@performanceRatedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "performanceMetrics": "Metrics",
+  "performanceAddMetric": "Add metric",
+  "performanceMetricCode": "Code (e.g. TRIPS)",
+  "performanceMetricName": "Name",
+  "performanceMetricUnit": "Unit (optional, e.g. km/l)",
+  "performanceViewDetails": "View details",
+  "performanceNoPeople": "No one to show",
+  "performanceLastWeek": "Last weekly values: {date}",
+  "@performanceLastWeek": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "performanceInvalidNumber": "Enter a number (0 or more)",
+  "performanceSelectRating": "Choose 1 to 5 stars"
 }

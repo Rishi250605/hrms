@@ -12,7 +12,14 @@ part of 'reports_repository.dart';
 @ProviderFor(reportsRepository)
 final reportsRepositoryProvider = ReportsRepositoryProvider._();
 
-final class ReportsRepositoryProvider extends $FunctionalProvider<ReportsRepository, ReportsRepository, ReportsRepository> with $Provider<ReportsRepository> {
+final class ReportsRepositoryProvider
+    extends
+        $FunctionalProvider<
+          ReportsRepository,
+          ReportsRepository,
+          ReportsRepository
+        >
+    with $Provider<ReportsRepository> {
   ReportsRepositoryProvider._()
     : super(
         from: null,
@@ -29,7 +36,9 @@ final class ReportsRepositoryProvider extends $FunctionalProvider<ReportsReposit
 
   @$internal
   @override
-  $ProviderElement<ReportsRepository> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<ReportsRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   ReportsRepository create(Ref ref) {
@@ -38,7 +47,10 @@ final class ReportsRepositoryProvider extends $FunctionalProvider<ReportsReposit
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(ReportsRepository value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<ReportsRepository>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ReportsRepository>(value),
+    );
   }
 }
 

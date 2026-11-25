@@ -1,4 +1,4 @@
-# CLAUDE.md — Transport HRMS (internal)
+# CLAUDE.md — FleetHR (Transport HRMS, internal)
 
 This file is the standing spec for this repository. Read it fully at the start of every session.
 When a decision here changes, update this file in the same commit and add a line to the Decisions log at the bottom.
@@ -19,7 +19,7 @@ An **internal HRMS mobile app for a transport services company** (India). One co
 - Multi-tenancy, billing, white-labelling.
 - An employee self-service app for drivers.
 - A separate web front end (one Flutter app only; Flutter web build may come later from the same code).
-- Recruitment/ATS, performance appraisal (phase 4 at earliest).
+- Recruitment/ATS, a full performance-appraisal workflow (goals, cycles, self-review; phase 4 at earliest). The simple ratings + weekly metrics in §7 are built.
 
 ---
 
@@ -97,7 +97,7 @@ Do not introduce other frameworks (NestJS, GraphQL, Firebase as a database, Mong
 │     │  ├─ employees/              # employees, job history, promotion, documents, uploads
 │     │  ├─ fleet/ roster/          # vehicles, routes, duty templates, duties
 │     │  ├─ attendance/ leave/      # team + self marking, approvals, corrections; leave / OD
-│     │  ├─ allowances/ payslips/ tasks/
+│     │  ├─ allowances/ payslips/ tasks/ performance/
 │     │  ├─ reports/                # attendance muster / exports, dashboard
 │     │  ├─ notifications/ settings/ health/
 │     │  └─ audit/                  # audit.record + the static audit-coverage check
@@ -116,7 +116,7 @@ Do not introduce other frameworks (NestJS, GraphQL, Firebase as a database, Mong
       └─ features/
          ├─ auth/ home/ settings/   # login, role homes, More + My Profile
          ├─ attendance/ requests/   # team / self / approvals; leave & OD + corrections
-         ├─ allowances/ payslips/ tasks/ reports/ users/ notifications/
+         ├─ allowances/ payslips/ tasks/ performance/ reports/ users/ notifications/
          └─ employees/ documents/ roster/
          each feature: data/, domain/ (optional), presentation/ (screens, widgets, providers)
 ```
@@ -194,6 +194,8 @@ Do not introduce other frameworks (NestJS, GraphQL, Firebase as a database, Mong
 
 **Tasks**: `Task` (groupId, date, businessUnitId, title, details, priority, allottedBy, assignee, status `PENDING | COMPLETED | NOT_DONE`, reason, comment, submittedAt, reopen fields).
 
+**Performance**: `PerformanceMetric` (code, name, unit, sortOrder, isActive; seeded MILEAGE, EMPLOYEE_COUNT, MAINTENANCE), `PerformanceRating` (employeeId, businessUnitId, rating 1–5, comment, ratedBy; never updated, every rating is history) and `PerformanceMetricValue` (employeeId, businessUnitId, metricId, weekStart = Monday, value Decimal(14,2); unique per person / metric / week).
+
 **Cross-cutting**: `AuditLog` (actor, action, entity, before / after, requestId, ip), `Notification` (in-app feed + push status), `Setting` (typed keys in `settings/registry.ts`).
 
 **Removed in phase 2**: `UserScope`, `OtpChallenge`, `NotificationLog`, the approval engine (`ApprovalRule / ApprovalRequest / ApprovalStep`), `User.isSuperAdmin`, role `OPERATIONAL_HEAD`. **Never built and cancelled**: the payroll engine models (`EmployeePay`, `SalaryStructure`, `PayrollRun`, `PayslipLine`, `StatutoryRate`, `AllowanceRule`, `AttendanceDay`), advances / recoveries and incidents (phase 3 at the earliest).
@@ -225,6 +227,7 @@ Phase 2 rules are specified in PHASE-2-FEATURES.md §1–§11 and built as summa
 - Allowances: RM for self or team (one request per beneficiary, one batch), OM for self; comment and/or voice note required; approver may change the amount only with a comment.
 - **Payslips are produced outside the app and uploaded by HR as `payslip-<empCode>.pdf` (the in-house payroll engine is cancelled).** Re-upload = new version; downloads are signed and audited.
 - Tasks: OM allots to direct-report RMs in a shared BU; RM submits Completed / Not done (reason); OM may reopen; overdue = pending after its date.
+- Performance: RM / OM / HR logins are rated 1–5 (+ optional comment) by HR (RMs and OMs in their BUs) or the director (anyone rated), at any time; no self-rating. The director enters per-person weekly values for the configurable metrics (Mileage, Employee count, Maintenance, …; Mondays, no future weeks). Everyone sees their own on My Profile; HR sees the people of their BUs; the director everyone. Drivers / loadmen and the director are not rated.
 - Reports: muster + summary (JSON, xlsx, PDF), scoped by §11; every export audited. Load-tested at 1,000 employees × 31 days.
 
 ### Privacy and security (DPDP Act 2023; core obligations from 13 May 2027)
@@ -266,6 +269,10 @@ GET  /payslips/:id/download   GET /payslips/:id/versions (HR, director)
 
 POST /tasks (OM)   GET /tasks?scope=allotted|assigned|all   POST /tasks/:id/submit (RM) | /reopen (OM)
 
+GET/POST/PATCH /performance-metrics (writes: director)   GET /performance/people (HR, director)
+GET  /performance/employees/:employeeId   POST /performance/employees/:employeeId/ratings (HR, director)
+PUT  /performance/employees/:employeeId/weeks/:weekStart (director)
+
 GET  /reports/attendance   GET /reports/attendance/export?format=xlsx|pdf   GET /reports/dashboard?businessUnitId=
 GET  /notifications   POST /notifications/:id/read | /read-all      GET/PUT /settings
 ```
@@ -274,7 +281,7 @@ GET  /notifications   POST /notifications/:id/read | /read-all      GET/PUT /set
 
 ## 9. App screens by role (phase 2)
 
-- **All:** login (employee code + password, company logo), BU switcher (remembered per user), My Profile, notifications (bell + deep links).
+- **All:** login (employee code + password, FleetHR logo), BU switcher (remembered per user), My Profile (with my performance rating and weekly values, except the director), notifications (bell + deep links).
 - **Regional manager:**
   - Tabs: Home, Attendance (Team bulk marking with offline queue + My attendance), Leave & OD, Allowances, More.
   - More: Tasks (Allotted / Completed), Payslips, Reports, Employees, Roster.
@@ -283,10 +290,10 @@ GET  /notifications   POST /notifications/:id/read | /read-all      GET/PUT /set
   - More: Allowances (incl. batch approvals), Payslips, Reports, Employees, Roster, Fleet.
 - **HR:**
   - Tabs: Home, Attendance (mine + OM approvals), Leave & OD, Payslips (incl. bulk upload), More.
-  - More: Allowances (approvals + monthly totals), Tasks, Reports, Employees (onboarding), Verify documents, Roster, Fleet.
+  - More: Allowances (approvals + monthly totals), Tasks, Reports, Performance (rate RMs / OMs), Employees (onboarding), Verify documents, Roster, Fleet.
 - **Director:**
   - Tabs: Home (company dashboard per BU + quick links), Attendance (HR approvals), Reports, Users, More.
-  - More: everything else, read-only.
+  - More: everything else, read-only; Performance (rate anyone, enter weekly values, manage metrics).
 
 ---
 ## 10. Build plan and definition of done
@@ -360,6 +367,7 @@ Still open (all built as settings / `TODO(business)`, listed in docs/phase-2-sum
 - Fleet types and headcount; who edits roster and fleet (Q7); bank-detail privacy (Q8).
 - Attendance edit window length; leave types, quotas, accrual details, sandwich rule, cross-year leave.
 - Allowance types and limits; how far ahead tasks may be allotted; payslip upload for future months.
+- Performance: metric units (is Maintenance a cost or a score?); should OMs see their RMs' ratings; should HR enter weekly values or rate other HRs.
 - Password policy; present-% formula; report range limit and file retention.
 - Payslip notice channel and WhatsApp/SMS provider; integrations (biometric, GPS / telematics, Tally, bank file format).
 
@@ -398,3 +406,6 @@ Still open (all built as settings / `TODO(business)`, listed in docs/phase-2-sum
 - 2026-11-10 `npm run smoke` drives the main flows end to end (every role logs in; attendance, leave, allowance, task, payslip upload + download, report exports, visibility spot checks) against a running API with the demo seed.
 - 2026-11-10 Flutter UI: themed Material 3 (rounded filled inputs, tonal cards, hero header on Home, app-bar avatar → My Profile with app version, sign-out confirmation). Spec wording for login errors and the password note. Gradle heap lowered to 2 GB (the 8 GB template default got builds killed on the 8 GB dev machine); `RECORD_AUDIO` permission added for voice notes.
 - 2026-11-13 Hosting (initial): API on Render (Blueprint `render.yaml`, Singapore) with Neon Postgres (ap-southeast-1); Indian-region production still planned (§3). Migrations run in the Render build via `prisma migrate deploy` over `DIRECT_URL` (Neon non-pooled; `prisma.config.ts` falls back to `DATABASE_URL`). Scheduled jobs run nightly in GitHub Actions (`.github/workflows/nightly-jobs.yml`, free; secrets `PROD_DATABASE_URL`, `PROD_DATA_ENCRYPTION_KEY`) via `npm run job:prod -- <names…>` (`src/run-job.ts` runs several in order) instead of the BullMQ worker + Redis, so Render needs only free services; leave accrual is idempotent per month, so it runs nightly. `MESSAGING_PROVIDER=console` is allowed in production because nothing sends messages since OTP login was removed (TODO(business): refuse it again once a provider exists). Never seed demo logins into a deployed database.
+- 2026-11-13 Android release signing: `mobile/android/key.properties` + `mobile/android/app/hrms-release.jks` (git-ignored, backed up out of band; release builds fall back to the debug key without them). AGP bumped to 9.1.1 (Flutter 3.50 minimum). Release APK: `flutter build apk --release --dart-define=API_BASE_URL=https://hrms-api-2sir.onrender.com/api/v1`.
+- 2026-11-25 App renamed **FleetHR** (launcher label, iOS / web / Windows names, `appTitle`); new logo in `mobile/assets/branding/logo.png` (contains the wordmark, shown on a white card on login / splash) and generated launcher icons. Package ids unchanged.
+- 2026-11-25 Performance (user request, narrows the "performance appraisal" non-goal): only login users (RM / OM / HR) are rated, 1–5 stars + optional comment, by HR or the director, kept as history; the director enters per-person weekly values for configurable metrics (`/performance-metrics`, seeded Mileage / Employee count / Maintenance). Visibility: self, HR in their BUs, director all (not via `DEPTH`: OM / RM see only themselves). Notifications `PERFORMANCE_RATED` / `PERFORMANCE_WEEK` open My Profile → performance.

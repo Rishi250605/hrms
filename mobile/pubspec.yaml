@@ -1,7 +1,7 @@
 name: hrms_app
-description: "Transport HRMS - internal manager app (director, HR, operational and regional managers)."
+description: "FleetHR - internal manager app (director, HR, operational and regional managers)."
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.13.7

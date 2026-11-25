@@ -1,6 +1,6 @@
 {
-    "name": "hrms_app",
-    "short_name": "hrms_app",
+    "name": "FleetHR",
+    "short_name": "FleetHR",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

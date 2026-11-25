@@ -158,6 +158,13 @@ Class | Method | HTTP request | Description
 [*PayslipsApi*](doc/PayslipsApi.md) | [**listPayslipVersions**](doc/PayslipsApi.md#listpayslipversions) | **GET** /payslips/{id}/versions | Upload history of a payslip
 [*PayslipsApi*](doc/PayslipsApi.md) | [**listPayslips**](doc/PayslipsApi.md#listpayslips) | **GET** /payslips | Payslips: mine, my team (§7.2) or all in my business units (HR / director)
 [*PayslipsApi*](doc/PayslipsApi.md) | [**uploadPayslips**](doc/PayslipsApi.md#uploadpayslips) | **POST** /payslips/upload | Bulk upload payslip PDFs for a pay period (payslip-&lt;empCode&gt;.pdf)
+[*PerformanceApi*](doc/PerformanceApi.md) | [**createPerformanceMetric**](doc/PerformanceApi.md#createperformancemetric) | **POST** /performance-metrics | Add a weekly metric
+[*PerformanceApi*](doc/PerformanceApi.md) | [**getPerformance**](doc/PerformanceApi.md#getperformance) | **GET** /performance/employees/{employeeId} | A person&#39;s rating history and weekly values (self, HR in the BU, director)
+[*PerformanceApi*](doc/PerformanceApi.md) | [**listPerformanceMetrics**](doc/PerformanceApi.md#listperformancemetrics) | **GET** /performance-metrics | Weekly performance metrics (Mileage, Employee count, Maintenance, …)
+[*PerformanceApi*](doc/PerformanceApi.md) | [**listPerformancePeople**](doc/PerformanceApi.md#listperformancepeople) | **GET** /performance/people | RMs, OMs and HRs in my business units with their latest rating (HR / director)
+[*PerformanceApi*](doc/PerformanceApi.md) | [**putPerformanceWeek**](doc/PerformanceApi.md#putperformanceweek) | **PUT** /performance/employees/{employeeId}/weeks/{weekStart} | Enter or change a person&#39;s weekly metric values (director); null removes a value
+[*PerformanceApi*](doc/PerformanceApi.md) | [**ratePerformance**](doc/PerformanceApi.md#rateperformance) | **POST** /performance/employees/{employeeId}/ratings | Rate a person 1–5 (HR: RMs and OMs in their BUs; director: anyone rated)
+[*PerformanceApi*](doc/PerformanceApi.md) | [**updatePerformanceMetric**](doc/PerformanceApi.md#updateperformancemetric) | **PATCH** /performance-metrics/{id} | Rename, reorder or deactivate a weekly metric
 [*ReportsApi*](doc/ReportsApi.md) | [**attendanceReport**](doc/ReportsApi.md#attendancereport) | **GET** /reports/attendance | Attendance muster and per-employee summary (scoped by §11)
 [*ReportsApi*](doc/ReportsApi.md) | [**exportAttendanceReport**](doc/ReportsApi.md#exportattendancereport) | **GET** /reports/attendance/export | Excel (muster + summary sheets) or PDF (landscape muster) download
 [*ReportsApi*](doc/ReportsApi.md) | [**getDashboard**](doc/ReportsApi.md#getdashboard) | **GET** /reports/dashboard | Home screen cards per business unit and my pending items
@@ -326,6 +333,19 @@ Class | Method | HTTP request | Description
  - [PayslipUploadResultInvalidInner](doc/PayslipUploadResultInvalidInner.md)
  - [PayslipVersionList](doc/PayslipVersionList.md)
  - [PayslipVersionListItemsInner](doc/PayslipVersionListItemsInner.md)
+ - [PerformanceMetricCreateBody](doc/PerformanceMetricCreateBody.md)
+ - [PerformanceMetricItem](doc/PerformanceMetricItem.md)
+ - [PerformanceMetricList](doc/PerformanceMetricList.md)
+ - [PerformanceMetricUpdateBody](doc/PerformanceMetricUpdateBody.md)
+ - [PerformancePersonItem](doc/PerformancePersonItem.md)
+ - [PerformancePersonList](doc/PerformancePersonList.md)
+ - [PerformanceRatingCreateBody](doc/PerformanceRatingCreateBody.md)
+ - [PerformanceRatingItem](doc/PerformanceRatingItem.md)
+ - [PerformanceSummary](doc/PerformanceSummary.md)
+ - [PerformanceWeek](doc/PerformanceWeek.md)
+ - [PerformanceWeekBody](doc/PerformanceWeekBody.md)
+ - [PerformanceWeekBodyValuesInner](doc/PerformanceWeekBodyValuesInner.md)
+ - [PerformanceWeekValue](doc/PerformanceWeekValue.md)
  - [PersonRef](doc/PersonRef.md)
  - [PhotoBody](doc/PhotoBody.md)
  - [PreferredChannel](doc/PreferredChannel.md)

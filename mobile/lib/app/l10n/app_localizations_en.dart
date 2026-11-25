@@ -10,7 +10,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Transport HRMS';
+  String get appTitle => 'FleetHR';
 
   @override
   String get retry => 'Retry';
@@ -32,8 +32,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginTitle => 'Sign in';
 
   @override
-  String get loginSubtitle =>
-      'Manager app for attendance, leave, allowances, payslips and tasks';
+  String get loginSubtitle => 'Drive Your People. Move Your Business.';
 
   @override
   String get phoneLabel => 'Mobile number';
@@ -1695,4 +1694,81 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get navPerformance => 'Performance';
+
+  @override
+  String get performanceNotRated => 'Not rated yet';
+
+  @override
+  String get performanceRate => 'Rate';
+
+  @override
+  String performanceRateTitle(String name) {
+    return 'Rate $name';
+  }
+
+  @override
+  String get performanceCommentOptional => 'Comment (optional)';
+
+  @override
+  String get performanceRated => 'Rating saved';
+
+  @override
+  String get performanceWeekly => 'Weekly values';
+
+  @override
+  String get performanceNoWeeks => 'No weekly values yet';
+
+  @override
+  String performanceWeekOf(String date) {
+    return 'Week of $date';
+  }
+
+  @override
+  String get performanceEnterWeek => 'Enter weekly values';
+
+  @override
+  String get performanceWeekSaved => 'Weekly values saved';
+
+  @override
+  String get performanceHistory => 'Rating history';
+
+  @override
+  String performanceRatedBy(String name, String when) {
+    return '$name · $when';
+  }
+
+  @override
+  String get performanceMetrics => 'Metrics';
+
+  @override
+  String get performanceAddMetric => 'Add metric';
+
+  @override
+  String get performanceMetricCode => 'Code (e.g. TRIPS)';
+
+  @override
+  String get performanceMetricName => 'Name';
+
+  @override
+  String get performanceMetricUnit => 'Unit (optional, e.g. km/l)';
+
+  @override
+  String get performanceViewDetails => 'View details';
+
+  @override
+  String get performanceNoPeople => 'No one to show';
+
+  @override
+  String performanceLastWeek(String date) {
+    return 'Last weekly values: $date';
+  }
+
+  @override
+  String get performanceInvalidNumber => 'Enter a number (0 or more)';
+
+  @override
+  String get performanceSelectRating => 'Choose 1 to 5 stars';
 }

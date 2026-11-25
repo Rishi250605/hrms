@@ -15,17 +15,28 @@ final currentUserProvider = CurrentUserProvider._();
 
 /// The signed-in manager, or null.
 
-final class CurrentUserProvider extends $FunctionalProvider<CurrentUser?, CurrentUser?, CurrentUser?> with $Provider<CurrentUser?> {
+final class CurrentUserProvider
+    extends $FunctionalProvider<CurrentUser?, CurrentUser?, CurrentUser?>
+    with $Provider<CurrentUser?> {
   /// The signed-in manager, or null.
   CurrentUserProvider._()
-    : super(from: null, argument: null, retry: null, name: r'currentUserProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'currentUserProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$currentUserHash();
 
   @$internal
   @override
-  $ProviderElement<CurrentUser?> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<CurrentUser?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   CurrentUser? create(Ref ref) {
@@ -34,7 +45,10 @@ final class CurrentUserProvider extends $FunctionalProvider<CurrentUser?, Curren
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(CurrentUser? value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<CurrentUser?>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<CurrentUser?>(value),
+    );
   }
 }
 
@@ -47,7 +61,13 @@ final businessUnitChoicesProvider = BusinessUnitChoicesProvider._();
 
 /// Business units the user can switch between: their memberships, or every active BU for the director.
 
-final class BusinessUnitChoicesProvider extends $FunctionalProvider<AsyncValue<List<BuRef>>, List<BuRef>, FutureOr<List<BuRef>>>
+final class BusinessUnitChoicesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<BuRef>>,
+          List<BuRef>,
+          FutureOr<List<BuRef>>
+        >
     with $FutureModifier<List<BuRef>>, $FutureProvider<List<BuRef>> {
   /// Business units the user can switch between: their memberships, or every active BU for the director.
   BusinessUnitChoicesProvider._()
@@ -66,7 +86,9 @@ final class BusinessUnitChoicesProvider extends $FunctionalProvider<AsyncValue<L
 
   @$internal
   @override
-  $FutureProviderElement<List<BuRef>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<BuRef>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<BuRef>> create(Ref ref) {
@@ -74,7 +96,8 @@ final class BusinessUnitChoicesProvider extends $FunctionalProvider<AsyncValue<L
   }
 }
 
-String _$businessUnitChoicesHash() => r'ece0f96381452bdb65d2273d1ea9c8acce7454bd';
+String _$businessUnitChoicesHash() =>
+    r'ece0f96381452bdb65d2273d1ea9c8acce7454bd';
 
 /// The business unit the screens are filtered to (PHASE-2-FEATURES §2.4). `null` = all of mine.
 /// Remembered per user on the device.
@@ -84,7 +107,8 @@ final selectedBusinessUnitProvider = SelectedBusinessUnitProvider._();
 
 /// The business unit the screens are filtered to (PHASE-2-FEATURES §2.4). `null` = all of mine.
 /// Remembered per user on the device.
-final class SelectedBusinessUnitProvider extends $NotifierProvider<SelectedBusinessUnit, String?> {
+final class SelectedBusinessUnitProvider
+    extends $NotifierProvider<SelectedBusinessUnit, String?> {
   /// The business unit the screens are filtered to (PHASE-2-FEATURES §2.4). `null` = all of mine.
   /// Remembered per user on the device.
   SelectedBusinessUnitProvider._()
@@ -107,11 +131,15 @@ final class SelectedBusinessUnitProvider extends $NotifierProvider<SelectedBusin
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(String? value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<String?>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String?>(value),
+    );
   }
 }
 
-String _$selectedBusinessUnitHash() => r'88e61e0aff5c24852ca4db92c928b9390bfde34e';
+String _$selectedBusinessUnitHash() =>
+    r'88e61e0aff5c24852ca4db92c928b9390bfde34e';
 
 /// The business unit the screens are filtered to (PHASE-2-FEATURES §2.4). `null` = all of mine.
 /// Remembered per user on the device.
@@ -122,7 +150,14 @@ abstract class _$SelectedBusinessUnit extends $Notifier<String?> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<String?, String?>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<String?, String?>, String?, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String?, String?>,
+              String?,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }
@@ -133,7 +168,8 @@ abstract class _$SelectedBusinessUnit extends $Notifier<String?> {
 final selectedDepotProvider = SelectedDepotProvider._();
 
 /// Depot the manager is working on (roster, fleet). Defaults to the first depot of the selected BU.
-final class SelectedDepotProvider extends $NotifierProvider<SelectedDepot, String?> {
+final class SelectedDepotProvider
+    extends $NotifierProvider<SelectedDepot, String?> {
   /// Depot the manager is working on (roster, fleet). Defaults to the first depot of the selected BU.
   SelectedDepotProvider._()
     : super(
@@ -155,7 +191,10 @@ final class SelectedDepotProvider extends $NotifierProvider<SelectedDepot, Strin
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(String? value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<String?>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String?>(value),
+    );
   }
 }
 
@@ -169,7 +208,14 @@ abstract class _$SelectedDepot extends $Notifier<String?> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<String?, String?>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<String?, String?>, String?, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String?, String?>,
+              String?,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }

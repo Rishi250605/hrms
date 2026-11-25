@@ -17,6 +17,7 @@ import { dutyTemplatesRouter, routesRouter, vehiclesRouter } from './modules/fle
 import { leaveBalancesRouter, leavePoliciesRouter, leaveRequestsRouter, leaveTypesRouter } from './modules/leave/router.js';
 import { notificationsRouter } from './modules/notifications/router.js';
 import { payslipsRouter } from './modules/payslips/router.js';
+import { performanceMetricsRouter, performanceRouter } from './modules/performance/router.js';
 import { reportsRouter } from './modules/reports/router.js';
 import { dutiesRouter, dutyAssignmentsRouter, rosterRouter } from './modules/roster/router.js';
 import { businessUnitsRouter, depotsRouter, regionsRouter } from './modules/org/router.js';
@@ -55,6 +56,8 @@ export const moduleRouters = [
   allowancesRouter,
   payslipsRouter,
   tasksRouter,
+  performanceMetricsRouter,
+  performanceRouter,
   reportsRouter,
 ];
 

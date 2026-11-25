@@ -10,6 +10,7 @@ import '../../../core/session.dart';
 import '../../../core/widgets/profile_avatar.dart';
 import '../../auth/domain/phone.dart';
 import '../../auth/presentation/providers/session_controller.dart';
+import '../../performance/presentation/performance_screens.dart';
 
 part 'more_screen.g.dart';
 
@@ -119,7 +120,10 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.profileTitle)),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(sessionControllerProvider.notifier).reloadUser(),
+        onRefresh: () async {
+          ref.invalidate(performanceSummaryProvider(user.employeeId));
+          await ref.read(sessionControllerProvider.notifier).reloadUser();
+        },
         child: ListView(
           key: const Key('profile'),
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -181,6 +185,7 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ),
             ),
+            if (!user.isDirector) ...[const SizedBox(height: 16), PerformanceCard(employeeId: user.employeeId)],
             const SizedBox(height: 16),
             Text(l10n.passwordByDirector, textAlign: TextAlign.center, style: theme.textTheme.bodySmall),
             if (version != null) Text(l10n.appVersion(version), textAlign: TextAlign.center, style: theme.textTheme.bodySmall),

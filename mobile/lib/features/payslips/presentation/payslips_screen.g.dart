@@ -12,10 +12,24 @@ part of 'payslips_screen.dart';
 @ProviderFor(payslips)
 final payslipsProvider = PayslipsFamily._();
 
-final class PayslipsProvider extends $FunctionalProvider<AsyncValue<PayslipPage>, PayslipPage, FutureOr<PayslipPage>>
+final class PayslipsProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<PayslipPage>,
+          PayslipPage,
+          FutureOr<PayslipPage>
+        >
     with $FutureModifier<PayslipPage>, $FutureProvider<PayslipPage> {
-  PayslipsProvider._({required PayslipsFamily super.from, required (String, String) super.argument})
-    : super(retry: null, name: r'payslipsProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+  PayslipsProvider._({
+    required PayslipsFamily super.from,
+    required (String, String) super.argument,
+  }) : super(
+         retry: null,
+         name: r'payslipsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$payslipsHash();
@@ -29,7 +43,9 @@ final class PayslipsProvider extends $FunctionalProvider<AsyncValue<PayslipPage>
 
   @$internal
   @override
-  $FutureProviderElement<PayslipPage> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<PayslipPage> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<PayslipPage> create(Ref ref) {
@@ -50,10 +66,19 @@ final class PayslipsProvider extends $FunctionalProvider<AsyncValue<PayslipPage>
 
 String _$payslipsHash() => r'ccff9277fd481d5bea5a2409a9f01f1bc08ccde8';
 
-final class PayslipsFamily extends $Family with $FunctionalFamilyOverride<FutureOr<PayslipPage>, (String, String)> {
-  PayslipsFamily._() : super(retry: null, name: r'payslipsProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class PayslipsFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<PayslipPage>, (String, String)> {
+  PayslipsFamily._()
+    : super(
+        retry: null,
+        name: r'payslipsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  PayslipsProvider call(String scope, String period) => PayslipsProvider._(argument: (scope, period), from: this);
+  PayslipsProvider call(String scope, String period) =>
+      PayslipsProvider._(argument: (scope, period), from: this);
 
   @override
   String toString() => r'payslipsProvider';

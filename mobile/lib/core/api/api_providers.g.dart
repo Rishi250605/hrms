@@ -12,16 +12,27 @@ part of 'api_providers.dart';
 @ProviderFor(appConfig)
 final appConfigProvider = AppConfigProvider._();
 
-final class AppConfigProvider extends $FunctionalProvider<AppConfig, AppConfig, AppConfig> with $Provider<AppConfig> {
+final class AppConfigProvider
+    extends $FunctionalProvider<AppConfig, AppConfig, AppConfig>
+    with $Provider<AppConfig> {
   AppConfigProvider._()
-    : super(from: null, argument: null, retry: null, name: r'appConfigProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'appConfigProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$appConfigHash();
 
   @$internal
   @override
-  $ProviderElement<AppConfig> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<AppConfig> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   AppConfig create(Ref ref) {
@@ -30,7 +41,10 @@ final class AppConfigProvider extends $FunctionalProvider<AppConfig, AppConfig, 
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(AppConfig value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<AppConfig>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AppConfig>(value),
+    );
   }
 }
 
@@ -39,16 +53,27 @@ String _$appConfigHash() => r'87f9d20a2d92252672162b2ce97547b7b2479239';
 @ProviderFor(tokenStorage)
 final tokenStorageProvider = TokenStorageProvider._();
 
-final class TokenStorageProvider extends $FunctionalProvider<TokenStorage, TokenStorage, TokenStorage> with $Provider<TokenStorage> {
+final class TokenStorageProvider
+    extends $FunctionalProvider<TokenStorage, TokenStorage, TokenStorage>
+    with $Provider<TokenStorage> {
   TokenStorageProvider._()
-    : super(from: null, argument: null, retry: null, name: r'tokenStorageProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'tokenStorageProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$tokenStorageHash();
 
   @$internal
   @override
-  $ProviderElement<TokenStorage> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<TokenStorage> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   TokenStorage create(Ref ref) {
@@ -57,7 +82,10 @@ final class TokenStorageProvider extends $FunctionalProvider<TokenStorage, Token
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(TokenStorage value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<TokenStorage>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<TokenStorage>(value),
+    );
   }
 }
 
@@ -72,7 +100,13 @@ final sessionExpiredEventsProvider = SessionExpiredEventsProvider._();
 /// Emits when the session can no longer be refreshed (refresh token rejected).
 /// The session controller listens and sends the user back to login.
 
-final class SessionExpiredEventsProvider extends $FunctionalProvider<StreamController<void>, StreamController<void>, StreamController<void>>
+final class SessionExpiredEventsProvider
+    extends
+        $FunctionalProvider<
+          StreamController<void>,
+          StreamController<void>,
+          StreamController<void>
+        >
     with $Provider<StreamController<void>> {
   /// Emits when the session can no longer be refreshed (refresh token rejected).
   /// The session controller listens and sends the user back to login.
@@ -92,7 +126,9 @@ final class SessionExpiredEventsProvider extends $FunctionalProvider<StreamContr
 
   @$internal
   @override
-  $ProviderElement<StreamController<void>> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<StreamController<void>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   StreamController<void> create(Ref ref) {
@@ -101,11 +137,15 @@ final class SessionExpiredEventsProvider extends $FunctionalProvider<StreamContr
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(StreamController<void> value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<StreamController<void>>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<StreamController<void>>(value),
+    );
   }
 }
 
-String _$sessionExpiredEventsHash() => r'60d16950ee4b45948e8370ac53a7e0ef35c79f73';
+String _$sessionExpiredEventsHash() =>
+    r'60d16950ee4b45948e8370ac53a7e0ef35c79f73';
 
 /// Dio without the auth interceptor: used for token refresh and for replaying requests after refresh.
 
@@ -114,17 +154,27 @@ final bareDioProvider = BareDioProvider._();
 
 /// Dio without the auth interceptor: used for token refresh and for replaying requests after refresh.
 
-final class BareDioProvider extends $FunctionalProvider<Dio, Dio, Dio> with $Provider<Dio> {
+final class BareDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
   /// Dio without the auth interceptor: used for token refresh and for replaying requests after refresh.
   BareDioProvider._()
-    : super(from: null, argument: null, retry: null, name: r'bareDioProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'bareDioProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$bareDioHash();
 
   @$internal
   @override
-  $ProviderElement<Dio> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   Dio create(Ref ref) {
@@ -133,7 +183,10 @@ final class BareDioProvider extends $FunctionalProvider<Dio, Dio, Dio> with $Pro
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Dio value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Dio>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Dio>(value),
+    );
   }
 }
 
@@ -146,17 +199,27 @@ final apiDioProvider = ApiDioProvider._();
 
 /// The Dio every repository uses (through [hrmsApiProvider]). Adds the bearer token and refreshes it on 401.
 
-final class ApiDioProvider extends $FunctionalProvider<Dio, Dio, Dio> with $Provider<Dio> {
+final class ApiDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
   /// The Dio every repository uses (through [hrmsApiProvider]). Adds the bearer token and refreshes it on 401.
   ApiDioProvider._()
-    : super(from: null, argument: null, retry: null, name: r'apiDioProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'apiDioProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$apiDioHash();
 
   @$internal
   @override
-  $ProviderElement<Dio> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   Dio create(Ref ref) {
@@ -165,7 +228,10 @@ final class ApiDioProvider extends $FunctionalProvider<Dio, Dio, Dio> with $Prov
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Dio value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Dio>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Dio>(value),
+    );
   }
 }
 
@@ -178,17 +244,28 @@ final hrmsApiProvider = HrmsApiProvider._();
 
 /// Generated OpenAPI client. Screens never use Dio directly: providers → repositories → this client.
 
-final class HrmsApiProvider extends $FunctionalProvider<HrmsApi, HrmsApi, HrmsApi> with $Provider<HrmsApi> {
+final class HrmsApiProvider
+    extends $FunctionalProvider<HrmsApi, HrmsApi, HrmsApi>
+    with $Provider<HrmsApi> {
   /// Generated OpenAPI client. Screens never use Dio directly: providers → repositories → this client.
   HrmsApiProvider._()
-    : super(from: null, argument: null, retry: null, name: r'hrmsApiProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hrmsApiProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$hrmsApiHash();
 
   @$internal
   @override
-  $ProviderElement<HrmsApi> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<HrmsApi> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   HrmsApi create(Ref ref) {
@@ -197,7 +274,10 @@ final class HrmsApiProvider extends $FunctionalProvider<HrmsApi, HrmsApi, HrmsAp
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(HrmsApi value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<HrmsApi>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HrmsApi>(value),
+    );
   }
 }
 

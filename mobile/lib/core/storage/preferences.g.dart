@@ -12,16 +12,27 @@ part of 'preferences.dart';
 @ProviderFor(preferences)
 final preferencesProvider = PreferencesProvider._();
 
-final class PreferencesProvider extends $FunctionalProvider<Preferences, Preferences, Preferences> with $Provider<Preferences> {
+final class PreferencesProvider
+    extends $FunctionalProvider<Preferences, Preferences, Preferences>
+    with $Provider<Preferences> {
   PreferencesProvider._()
-    : super(from: null, argument: null, retry: null, name: r'preferencesProvider', isAutoDispose: false, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'preferencesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$preferencesHash();
 
   @$internal
   @override
-  $ProviderElement<Preferences> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
+  $ProviderElement<Preferences> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   Preferences create(Ref ref) {
@@ -30,7 +41,10 @@ final class PreferencesProvider extends $FunctionalProvider<Preferences, Prefere
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Preferences value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<Preferences>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Preferences>(value),
+    );
   }
 }
 

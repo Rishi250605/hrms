@@ -17,6 +17,7 @@ import 'package:hrms_app/features/auth/domain/current_user.dart';
 import 'package:hrms_app/features/employees/data/employees_repository.dart';
 import 'package:hrms_app/features/home/data/dashboard_repository.dart';
 import 'package:hrms_app/features/payslips/data/payslips_repository.dart';
+import 'package:hrms_app/features/performance/data/performance_repository.dart';
 import 'package:hrms_app/features/requests/data/requests_repository.dart';
 import 'package:hrms_app/features/roster/data/roster_repository.dart';
 import 'package:hrms_app/features/tasks/data/tasks_repository.dart';
@@ -850,6 +851,80 @@ class FakeTasksRepository with Unimplemented implements TasksRepository {
   }
 }
 
+Map<String, dynamic> ratingJson(int rating, {String? comment, String by = 'Priya Nair'}) => {
+  'id': 'r-$rating-${comment ?? ''}',
+  'rating': rating,
+  'comment': comment,
+  'ratedBy': person('emp-hr', by, code: 'NLS001', role: 'HR'),
+  'createdAt': '2026-11-20T05:00:00.000Z',
+};
+
+final metricsJson = [
+  {'id': 'm-mileage', 'code': 'MILEAGE', 'name': 'Mileage', 'unit': 'km/l', 'sortOrder': 10, 'isActive': true},
+  {'id': 'm-count', 'code': 'EMPLOYEE_COUNT', 'name': 'Employee count', 'unit': 'count', 'sortOrder': 20, 'isActive': true},
+  {'id': 'm-maint', 'code': 'MAINTENANCE', 'name': 'Maintenance', 'unit': null, 'sortOrder': 30, 'isActive': true},
+];
+
+Map<String, dynamic> performanceJson(
+  String employeeId,
+  String name, {
+  List<Map<String, dynamic>> ratings = const [],
+  Map<String, Map<String, num?>> weeks = const {},
+  bool canRate = false,
+  bool canEnterMetrics = false,
+}) => {
+  'person': person(employeeId, name, code: 'NLS002', role: 'OPERATIONAL_MANAGER'),
+  'businessUnit': nlsJson,
+  'latestRating': ratings.isEmpty ? null : ratings.first,
+  'ratings': ratings,
+  'weeks': [
+    for (final w in weeks.entries)
+      {
+        'weekStart': w.key,
+        'values': [
+          for (final m in metricsJson) {'metricId': m['id'], 'code': m['code'], 'name': m['name'], 'unit': m['unit'], 'value': w.value[m['code']]},
+        ],
+      },
+  ],
+  'canRate': canRate,
+  'canEnterMetrics': canEnterMetrics,
+};
+
+class FakePerformanceRepository with Unimplemented implements PerformanceRepository {
+  final summaries = <String, Map<String, dynamic>>{};
+  List<Map<String, dynamic>> peopleJson = [];
+  final rated = <(String, int, String?)>[];
+  final weeksPut = <(String, String, Map<String, num?>)>[];
+
+  @override
+  Future<PerformanceSummary> summary(String employeeId, {int weeks = 12}) async =>
+      PerformanceSummary.fromJson(summaries[employeeId] ?? performanceJson(employeeId, 'Someone'));
+
+  @override
+  Future<List<PerformancePersonItem>> people({String? businessUnitId}) async => [for (final p in peopleJson) PerformancePersonItem.fromJson(p)];
+
+  @override
+  Future<PerformanceRatingItem> rate(String employeeId, int rating, String? comment) async {
+    rated.add((employeeId, rating, comment));
+    final r = ratingJson(rating, comment: comment, by: 'Director');
+    final s = summaries[employeeId];
+    if (s != null) {
+      s['ratings'] = [r, ...(s['ratings'] as List)];
+      s['latestRating'] = r;
+    }
+    return PerformanceRatingItem.fromJson(r);
+  }
+
+  @override
+  Future<PerformanceSummary> putWeek(String employeeId, String weekStart, Map<String, num?> values) async {
+    weeksPut.add((employeeId, weekStart, values));
+    return summary(employeeId);
+  }
+
+  @override
+  Future<List<PerformanceMetricItem>> metrics() async => [for (final m in metricsJson) PerformanceMetricItem.fromJson(m)];
+}
+
 // ───────────────────────────── App harness ─────────────────────────────
 
 class Fakes {
@@ -868,6 +943,7 @@ class Fakes {
   final allowances = FakeAllowancesRepository();
   final payslips = FakePayslipsRepository();
   final tasks = FakeTasksRepository();
+  final performance = FakePerformanceRepository();
   final preferences = MemoryPreferences();
 
   List<Override> get overrides => [
@@ -882,6 +958,7 @@ class Fakes {
     allowancesRepositoryProvider.overrideWithValue(allowances),
     payslipsRepositoryProvider.overrideWithValue(payslips),
     tasksRepositoryProvider.overrideWithValue(tasks),
+    performanceRepositoryProvider.overrideWithValue(performance),
     preferencesProvider.overrideWithValue(preferences),
   ];
 }

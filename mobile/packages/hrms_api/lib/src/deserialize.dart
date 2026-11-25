@@ -123,6 +123,19 @@ import 'package:hrms_api/src/model/payslip_upload_result.dart';
 import 'package:hrms_api/src/model/payslip_upload_result_invalid_inner.dart';
 import 'package:hrms_api/src/model/payslip_version_list.dart';
 import 'package:hrms_api/src/model/payslip_version_list_items_inner.dart';
+import 'package:hrms_api/src/model/performance_metric_create_body.dart';
+import 'package:hrms_api/src/model/performance_metric_item.dart';
+import 'package:hrms_api/src/model/performance_metric_list.dart';
+import 'package:hrms_api/src/model/performance_metric_update_body.dart';
+import 'package:hrms_api/src/model/performance_person_item.dart';
+import 'package:hrms_api/src/model/performance_person_list.dart';
+import 'package:hrms_api/src/model/performance_rating_create_body.dart';
+import 'package:hrms_api/src/model/performance_rating_item.dart';
+import 'package:hrms_api/src/model/performance_summary.dart';
+import 'package:hrms_api/src/model/performance_week.dart';
+import 'package:hrms_api/src/model/performance_week_body.dart';
+import 'package:hrms_api/src/model/performance_week_body_values_inner.dart';
+import 'package:hrms_api/src/model/performance_week_value.dart';
 import 'package:hrms_api/src/model/person_ref.dart';
 import 'package:hrms_api/src/model/photo_body.dart';
 import 'package:hrms_api/src/model/presign_body.dart';
@@ -581,6 +594,47 @@ ReturnType deserialize<ReturnType, BaseType>(
       return PayslipVersionListItemsInner.fromJson(
             value as Map<String, dynamic>,
           )
+          as ReturnType;
+    case 'PerformanceMetricCreateBody':
+      return PerformanceMetricCreateBody.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceMetricItem':
+      return PerformanceMetricItem.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceMetricList':
+      return PerformanceMetricList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceMetricUpdateBody':
+      return PerformanceMetricUpdateBody.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformancePersonItem':
+      return PerformancePersonItem.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformancePersonList':
+      return PerformancePersonList.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceRatingCreateBody':
+      return PerformanceRatingCreateBody.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceRatingItem':
+      return PerformanceRatingItem.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceSummary':
+      return PerformanceSummary.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceWeek':
+      return PerformanceWeek.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceWeekBody':
+      return PerformanceWeekBody.fromJson(value as Map<String, dynamic>)
+          as ReturnType;
+    case 'PerformanceWeekBodyValuesInner':
+      return PerformanceWeekBodyValuesInner.fromJson(
+            value as Map<String, dynamic>,
+          )
+          as ReturnType;
+    case 'PerformanceWeekValue':
+      return PerformanceWeekValue.fromJson(value as Map<String, dynamic>)
           as ReturnType;
     case 'PersonRef':
       return PersonRef.fromJson(value as Map<String, dynamic>) as ReturnType;

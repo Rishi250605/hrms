@@ -12,7 +12,8 @@ part of 'attendance_screen.dart';
 @ProviderFor(AttendanceDate)
 final attendanceDateProvider = AttendanceDateProvider._();
 
-final class AttendanceDateProvider extends $NotifierProvider<AttendanceDate, String> {
+final class AttendanceDateProvider
+    extends $NotifierProvider<AttendanceDate, String> {
   AttendanceDateProvider._()
     : super(
         from: null,
@@ -33,7 +34,10 @@ final class AttendanceDateProvider extends $NotifierProvider<AttendanceDate, Str
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(String value) {
-    return $ProviderOverride(origin: this, providerOverride: $SyncValueProvider<String>(value));
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<String>(value),
+    );
   }
 }
 
@@ -45,7 +49,14 @@ abstract class _$AttendanceDate extends $Notifier<String> {
   @override
   WhenComplete runBuild() {
     final ref = this.ref as $Ref<String, String>;
-    final element = ref.element as $ClassProviderElement<AnyNotifier<String, String>, String, Object?, Object?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<String, String>,
+              String,
+              Object?,
+              Object?
+            >;
     return element.handleCreate(ref, build);
   }
 }
@@ -53,10 +64,26 @@ abstract class _$AttendanceDate extends $Notifier<String> {
 @ProviderFor(teamAttendance)
 final teamAttendanceProvider = TeamAttendanceFamily._();
 
-final class TeamAttendanceProvider extends $FunctionalProvider<AsyncValue<TeamAttendanceDay>, TeamAttendanceDay, FutureOr<TeamAttendanceDay>>
-    with $FutureModifier<TeamAttendanceDay>, $FutureProvider<TeamAttendanceDay> {
-  TeamAttendanceProvider._({required TeamAttendanceFamily super.from, required String super.argument})
-    : super(retry: null, name: r'teamAttendanceProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+final class TeamAttendanceProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<TeamAttendanceDay>,
+          TeamAttendanceDay,
+          FutureOr<TeamAttendanceDay>
+        >
+    with
+        $FutureModifier<TeamAttendanceDay>,
+        $FutureProvider<TeamAttendanceDay> {
+  TeamAttendanceProvider._({
+    required TeamAttendanceFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'teamAttendanceProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
   String debugGetCreateSourceHash() => _$teamAttendanceHash();
@@ -70,7 +97,9 @@ final class TeamAttendanceProvider extends $FunctionalProvider<AsyncValue<TeamAt
 
   @$internal
   @override
-  $FutureProviderElement<TeamAttendanceDay> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<TeamAttendanceDay> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<TeamAttendanceDay> create(Ref ref) {
@@ -91,10 +120,19 @@ final class TeamAttendanceProvider extends $FunctionalProvider<AsyncValue<TeamAt
 
 String _$teamAttendanceHash() => r'6e5b55fa9bdfad62b73289839aa400fd3b7781d2';
 
-final class TeamAttendanceFamily extends $Family with $FunctionalFamilyOverride<FutureOr<TeamAttendanceDay>, String> {
-  TeamAttendanceFamily._() : super(retry: null, name: r'teamAttendanceProvider', dependencies: null, $allTransitiveDependencies: null, isAutoDispose: true);
+final class TeamAttendanceFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<TeamAttendanceDay>, String> {
+  TeamAttendanceFamily._()
+    : super(
+        retry: null,
+        name: r'teamAttendanceProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
 
-  TeamAttendanceProvider call(String date) => TeamAttendanceProvider._(argument: date, from: this);
+  TeamAttendanceProvider call(String date) =>
+      TeamAttendanceProvider._(argument: date, from: this);
 
   @override
   String toString() => r'teamAttendanceProvider';
@@ -107,18 +145,36 @@ final myAttendanceProvider = MyAttendanceProvider._();
 
 /// My own marks of the last 31 days.
 
-final class MyAttendanceProvider extends $FunctionalProvider<AsyncValue<List<AttendanceMarkItem>>, List<AttendanceMarkItem>, FutureOr<List<AttendanceMarkItem>>>
-    with $FutureModifier<List<AttendanceMarkItem>>, $FutureProvider<List<AttendanceMarkItem>> {
+final class MyAttendanceProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<AttendanceMarkItem>>,
+          List<AttendanceMarkItem>,
+          FutureOr<List<AttendanceMarkItem>>
+        >
+    with
+        $FutureModifier<List<AttendanceMarkItem>>,
+        $FutureProvider<List<AttendanceMarkItem>> {
   /// My own marks of the last 31 days.
   MyAttendanceProvider._()
-    : super(from: null, argument: null, retry: null, name: r'myAttendanceProvider', isAutoDispose: true, dependencies: null, $allTransitiveDependencies: null);
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'myAttendanceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$myAttendanceHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<AttendanceMarkItem>> $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
+  $FutureProviderElement<List<AttendanceMarkItem>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
 
   @override
   FutureOr<List<AttendanceMarkItem>> create(Ref ref) {
@@ -138,13 +194,21 @@ final attendanceApprovalsProvider = AttendanceApprovalsProvider._();
 final class AttendanceApprovalsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})>,
+          AsyncValue<
+            ({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})
+          >,
           ({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks}),
-          FutureOr<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})>
+          FutureOr<
+            ({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})
+          >
         >
     with
-        $FutureModifier<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})>,
-        $FutureProvider<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})> {
+        $FutureModifier<
+          ({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})
+        >,
+        $FutureProvider<
+          ({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})
+        > {
   /// Self-marks and corrections waiting for my decision.
   AttendanceApprovalsProvider._()
     : super(
@@ -162,13 +226,17 @@ final class AttendanceApprovalsProvider
 
   @$internal
   @override
-  $FutureProviderElement<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $FutureProviderElement<
+    ({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})
+  >
+  $createElement($ProviderPointer pointer) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})> create(Ref ref) {
+  FutureOr<({List<CorrectionItem> corrections, List<AttendanceMarkItem> marks})>
+  create(Ref ref) {
     return attendanceApprovals(ref);
   }
 }
 
-String _$attendanceApprovalsHash() => r'84ba39e9c0a378633f7ab5e6d1e973fadd32078b';
+String _$attendanceApprovalsHash() =>
+    r'84ba39e9c0a378633f7ab5e6d1e973fadd32078b';

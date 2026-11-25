@@ -97,7 +97,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Transport HRMS'**
+  /// **'FleetHR'**
   String get appTitle;
 
   /// No description provided for @retry.
@@ -139,7 +139,7 @@ abstract class AppLocalizations {
   /// No description provided for @loginSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Manager app for attendance, leave, allowances, payslips and tasks'**
+  /// **'Drive Your People. Move Your Business.'**
   String get loginSubtitle;
 
   /// No description provided for @phoneLabel.
@@ -3057,6 +3057,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 person} other{{count} people}}'**
   String peopleCount(int count);
+
+  /// No description provided for @navPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance'**
+  String get navPerformance;
+
+  /// No description provided for @performanceNotRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Not rated yet'**
+  String get performanceNotRated;
+
+  /// No description provided for @performanceRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate'**
+  String get performanceRate;
+
+  /// No description provided for @performanceRateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate {name}'**
+  String performanceRateTitle(String name);
+
+  /// No description provided for @performanceCommentOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment (optional)'**
+  String get performanceCommentOptional;
+
+  /// No description provided for @performanceRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating saved'**
+  String get performanceRated;
+
+  /// No description provided for @performanceWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly values'**
+  String get performanceWeekly;
+
+  /// No description provided for @performanceNoWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'No weekly values yet'**
+  String get performanceNoWeeks;
+
+  /// No description provided for @performanceWeekOf.
+  ///
+  /// In en, this message translates to:
+  /// **'Week of {date}'**
+  String performanceWeekOf(String date);
+
+  /// No description provided for @performanceEnterWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter weekly values'**
+  String get performanceEnterWeek;
+
+  /// No description provided for @performanceWeekSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly values saved'**
+  String get performanceWeekSaved;
+
+  /// No description provided for @performanceHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating history'**
+  String get performanceHistory;
+
+  /// No description provided for @performanceRatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} · {when}'**
+  String performanceRatedBy(String name, String when);
+
+  /// No description provided for @performanceMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Metrics'**
+  String get performanceMetrics;
+
+  /// No description provided for @performanceAddMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Add metric'**
+  String get performanceAddMetric;
+
+  /// No description provided for @performanceMetricCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Code (e.g. TRIPS)'**
+  String get performanceMetricCode;
+
+  /// No description provided for @performanceMetricName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get performanceMetricName;
+
+  /// No description provided for @performanceMetricUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit (optional, e.g. km/l)'**
+  String get performanceMetricUnit;
+
+  /// No description provided for @performanceViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View details'**
+  String get performanceViewDetails;
+
+  /// No description provided for @performanceNoPeople.
+  ///
+  /// In en, this message translates to:
+  /// **'No one to show'**
+  String get performanceNoPeople;
+
+  /// No description provided for @performanceLastWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Last weekly values: {date}'**
+  String performanceLastWeek(String date);
+
+  /// No description provided for @performanceInvalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number (0 or more)'**
+  String get performanceInvalidNumber;
+
+  /// No description provided for @performanceSelectRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose 1 to 5 stars'**
+  String get performanceSelectRating;
 }
 
 class _AppLocalizationsDelegate
